@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="{% url 'principal' %}">Home</a>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <a href="{% url 'miperfil' %}">Ver Perfil</a>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <a href="{% url 'about' %}">Sobre Nosotros</a>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <a href="{% url 'crearPublicaciones' %}">Crear Publicacion</a>
+            </li>
+        </ul>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

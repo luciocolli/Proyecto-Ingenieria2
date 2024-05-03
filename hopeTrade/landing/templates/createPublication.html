@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Crear Publicacion</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button>
+            Crear
+        </button>
+    </form>
+
+
+{% endblock %}
