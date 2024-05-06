@@ -10,4 +10,3 @@ class User(models.Model):
     date = models.DateField()
     password = models.CharField(max_length=100)     
     rol = models.CharField(max_length=1, default=1)
-                

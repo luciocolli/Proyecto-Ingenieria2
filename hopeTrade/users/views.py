@@ -55,3 +55,25 @@ def get_years(date):
     actual_date = datetime.now().date()
     edad = actual_date.year - date.year - ((actual_date.month, actual_date.day) < (date.month, date.day))
     return edad
+
+def asignar_colaborador(request):
+    mensaje = None
+
+    if request.method == 'POST':
+        dni = request.POST.get('dni')
+        try:
+            usuario = User.objects.get(dni=dni)
+        except User.DoesNotExist:
+            mensaje = f"No se encuentra el usuario con el DNI {dni}"
+        else:
+            if request.user.is_authenticated:  # Verificar si el usuario está autenticado
+                if request.user.rol == '3':
+                    usuario.rol = '2'
+                    usuario.save()
+                    mensaje = "Colaborador asignado correctamente"
+                else:
+                    mensaje = "No tienes los permisos para realizar esta acción"
+            else:
+                mensaje = "Debes iniciar sesión para realizar esta acción"
+
+    return render(request, 'asignar_colaborador.html', {'mensaje': mensaje})
