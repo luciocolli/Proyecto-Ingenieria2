@@ -7,7 +7,7 @@ class CreateNewUser(forms.Form):
     surname = forms.CharField(label="Apellido", max_length=100, widget=forms.TextInput())
     mail = forms.CharField(label="Mail", max_length=100, widget=forms.TextInput())
     date = forms.DateField(label="Fecha", widget=forms.TextInput(attrs={'type': 'date'}))
-    password = forms.CharField(label="Contraseña", max_length=100, widget=forms.TextInput())
+    password = forms.CharField(label="Contraseña", max_length=100, widget=forms.PasswordInput())
 
 
 

@@ -1,5 +1,5 @@
 {% block content %}
-
+    {% csrf_token %}
     <h1> Publicaciones del usuario  {{ auth }}</h1>
 
 {% endblock %}

@@ -1,5 +1,7 @@
 {% block content %}
 
+    {% csrf_token %}
+
     <h1>Perfil de {{ name }}</h1>
     <p>Nombre: {{ name }}  {{ surname }}</p>
     <p>Email: {{ email }}</p>
