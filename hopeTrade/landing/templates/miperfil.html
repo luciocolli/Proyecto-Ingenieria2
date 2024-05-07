@@ -1,7 +1,31 @@
 <!DOCTYPE html>
 
-{% extends 'base.html' %}
 
 {% block content %}
-<h2>Hola Planeta de mi Perfil</h2>
+    {% csrf_token %}
+
+    <div>
+        <h1>Mi perfil</h1>
+        <div>
+            <label>Nombre:</label>
+            <span>{{ name }}</span>
+        </div>
+        <div>
+            <label>Apellido:</label>
+            <span>{{ surname }}</span>
+        </div>
+        <div>
+            <label>Email:</label>
+            <span>{{ mail }}</span>
+        </div>
+        <div>
+            <label>DNI:</label>
+            <span>{{ dni }}</span>
+        </div>
+        <div>
+            <label>Fecha:</label>
+            <span>{{ date }}</span>
+        </div>
+    </div>
+
 {% endblock %}

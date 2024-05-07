@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Publication
 from users.models import User
 from .forms import CreateNewPublication
@@ -11,9 +11,6 @@ def index(request):
 
 def about(request):
     return render(request, 'about.html')
-
-def mostrarMiPerfil(request):
-    return render(request, 'miperfil.html')
 
 @login_required
 def createPublication(request):
@@ -42,4 +39,19 @@ def show_all_posts(request):
         posts = Publication.objects.exclude(user= logged_user.id)
         return render(request, 'show-all-posts.html',{
             'posts' : posts
+        })
+    
+@login_required
+def show_my_profile(request):
+    
+    if request.method == 'GET':
+        logged_user = request.user
+        #logged_user = get_object_or_404(User.objects.filter(id=2))
+        dni = logged_user.dni
+        return render(request, 'miperfil.html', {
+            'dni' : dni,
+            'name' : logged_user.name,
+            'surname' : logged_user.surname,
+            'mail' : logged_user.mail,
+            'date' : logged_user.date
         })
