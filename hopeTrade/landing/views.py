@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Publication
 from users.models import User
 from .forms import CreateNewPublication
@@ -32,7 +32,7 @@ def createPublication(request):
             date = request.POST['date'],
             user = request.user # esto retorna al usuario que se encuentra navegando en el sistema
         )
-        return redirect('principal')
+        return redirect('show-all-posts.html')
     
 @login_required
 def show_all_posts(request):
@@ -42,4 +42,18 @@ def show_all_posts(request):
         posts = Publication.objects.exclude(user= logged_user.id)
         return render(request, 'show-all-posts.html',{
             'posts' : posts
+        })
+    
+
+@login_required
+def show_post(request, id):
+    if request.method == 'GET':
+        post = get_object_or_404(Publication, id=id)
+        return render(request, 'view-post.html', {
+            'title': post.title,
+            'description': post.description,
+            'category': post.category,
+            'state': post.state,
+            'date': post.date,
+            'user': post.user
         })

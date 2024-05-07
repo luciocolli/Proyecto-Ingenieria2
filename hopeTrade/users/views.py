@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import User
 from django.db import IntegrityError
 from .forms import CreateNewUser, CreatelogIn
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 
 from django.contrib.auth.decorators import login_required
 from . import backend as back
@@ -73,7 +73,7 @@ def login_view(request):
             return render(request, 'login.html')
 
 @login_required
-def view_profile(request, id=2):  # puse el id=2 porque se supone que me tiene que llegar como parametro el que fue seleccionado, pero no hicimos el ver publiciones
+def view_profile(request, id):  # puse el id=2 porque se supone que me tiene que llegar como parametro el que fue seleccionado, pero no hicimos el ver publiciones
     if request.method == 'GET':
         user = get_object_or_404(User, id=id)
         return render(request, 'view_profile.html', {
@@ -99,3 +99,9 @@ def view_exchanges(request):
 def view_ratings(request):
     if request.method == 'GET':
         return render(request, 'user-ratings.html')
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect('home')
