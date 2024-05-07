@@ -29,7 +29,7 @@ def createPublication(request):
             date = request.POST['date'],
             user = request.user # esto retorna al usuario que se encuentra navegando en el sistema
         )
-        return redirect('principal')
+        return redirect('show-all-posts.html')
     
 @login_required
 def show_all_posts(request):
@@ -54,4 +54,17 @@ def show_my_profile(request):
             'surname' : logged_user.surname,
             'mail' : logged_user.mail,
             'date' : logged_user.date
+        })
+
+@login_required
+def show_post(request, id):
+    if request.method == 'GET':
+        post = get_object_or_404(Publication, id=id)
+        return render(request, 'view-post.html', {
+            'title': post.title,
+            'description': post.description,
+            'category': post.category,
+            'state': post.state,
+            'date': post.date,
+            'user': post.user
         })

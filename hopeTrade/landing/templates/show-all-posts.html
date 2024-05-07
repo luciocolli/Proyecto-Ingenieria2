@@ -4,7 +4,7 @@
 
 
 {% block content %}
-
+    {% csrf_token %}
     <h1>Publicaciones</h1>
 
     {% for post in posts %}
@@ -13,8 +13,8 @@
         <h2> {{ post.title }} </h2>
     
         <p>Usuario: {{ post.user.name }}</p>
-        <form method="GET" action="{% url 'profile' post.user.id %}">
-            <button type="submit">Ver usuario</button>
+        <form method="GET" action="{% url 'post' post.id %}">
+            <button type="submit">Ver Publicacion</button> <!-- Antes decia Ver Usuario -->
         </form>
     </div>
     
