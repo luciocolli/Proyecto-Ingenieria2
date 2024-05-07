@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <h1>Publicaciones</h1>
+
+    {% for post in posts %}
+
+    <div>
+        <h2> {{ post.title }} </h2>
+    
+        <p>Usuario: {{ post.user.name }}</p>
+        <form method="GET" action="{% url 'profile' post.user.id %}">
+            <button type="submit">Ver usuario</button>
+        </form>
+    </div>
+    
+    {% endfor %}
+
+
+{% endblock %}

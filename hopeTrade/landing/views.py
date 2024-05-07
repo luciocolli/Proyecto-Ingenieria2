@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Publication
+from users.models import User
 from .forms import CreateNewPublication
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -13,6 +15,7 @@ def about(request):
 def mostrarMiPerfil(request):
     return render(request, 'miperfil.html')
 
+@login_required
 def createPublication(request):
     if request.method == 'GET':
         return render(request, 'createPublication.html', {
@@ -27,5 +30,16 @@ def createPublication(request):
             category = request.POST['category'],
             state = request.POST['state'],
             date = request.POST['date'],
+            user = request.user # esto retorna al usuario que se encuentra navegando en el sistema
         )
         return redirect('principal')
+    
+@login_required
+def show_all_posts(request):
+    if request.method == 'GET':
+        logged_user = request.user
+        # Tomo las publicaciones de todos los usuarios menos del que se encuentra logueado
+        posts = Publication.objects.exclude(user= logged_user.id)
+        return render(request, 'show-all-posts.html',{
+            'posts' : posts
+        })

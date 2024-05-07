@@ -1,10 +1,14 @@
 from django.urls import path
 from . import views
+from landing import views as langin_views
 
 urlpatterns = [
     path('', views.index, name= 'home'),
     path('login/', views.login_view, name= 'login'),
     path('register/', views.register, name= 'register'),
-    path('holanda/', views.login_view, name='holanda')
-    
+    path('all-posts.html/', langin_views.show_all_posts, name= 'holanda'),
+    path('view-profile/<int:id>', views.view_profile, name= 'profile'),
+    path('user-posts/', views.view_posts, name= 'user-posts'),
+    path('user-exchages/', views.view_exchanges, name= 'user-exchanges'),
+    path('user-ratings/', views.view_ratings, name= 'user-ratings')
     ]

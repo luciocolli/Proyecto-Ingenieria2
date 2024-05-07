@@ -1,0 +1,12 @@
+{% block content %}
+
+    <h1>Perfil de {{ name }}</h1>
+    <p>Nombre: {{ name }}  {{ surname }}</p>
+    <p>Email: {{ email }}</p>
+    <p>Calificación: {{ calification }}</p>
+    <br>
+    <a href="{% url 'user-posts' %}"><button>Ver Publicaciones</button></a>
+    <a href="{% url 'user-exchanges' %}"><button>Ver Intercambios</button></a>
+    <a href="{% url 'user-ratings' %}"><button>Ver Calificaciones</button></a>
+
+{% endblock %}
