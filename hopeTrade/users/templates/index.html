@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HopeTrade</title>
-    <link rel="stylesheet" href="../Styles/index.css">
+    <link rel="stylesheet" href="../static/index.css">
 </head>
 <body>
     <header>
@@ -16,12 +16,14 @@
          <nav>
              <ul>
                 <a href="{% url 'login' %}"><button>Iniciar Sesión</button></a>
+                <a href="{% url 'register' %}"><button>Registrarse</button></a>
              </ul>
          </nav>
         </div>
      </header>
-    <h1>Bienvenido a HopeTrade!!</h1>
+    <h1>Bienvenido</h1>
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos magnam nisi est ut, possimus odit quisquam. Id, qui recusandae voluptate inventore impedit nostrum corrupti voluptatem quas consectetur iusto culpa ullam.</p>
     
-    <a href="{% url 'register' %}"><button>Ver Intercambios</button></a>
+
 </body>
 </html>

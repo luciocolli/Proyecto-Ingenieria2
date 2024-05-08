@@ -32,6 +32,7 @@ nav ul li a {
     padding: 5px 10px;
     border-radius: 5px;
     background-color: #79b18d;
+    text-decoration: none;
 }
 
 nav ul li a:hover {
@@ -55,4 +56,8 @@ button {
 
 button:hover {
     background-color: #92b268;
+}
+
+a {
+    text-decoration: none;
 }

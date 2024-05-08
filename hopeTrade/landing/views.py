@@ -29,7 +29,7 @@ def createPublication(request):
             date = request.POST['date'],
             user = request.user # esto retorna al usuario que se encuentra navegando en el sistema
         )
-        return redirect('show-all-posts.html')
+        return redirect('all-posts')
     
 @login_required
 def show_all_posts(request):
