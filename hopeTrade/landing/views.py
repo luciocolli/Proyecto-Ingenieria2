@@ -53,7 +53,8 @@ def show_my_profile(request):
             'name' : logged_user.name,
             'surname' : logged_user.surname,
             'mail' : logged_user.mail,
-            'date' : logged_user.date
+            'date' : logged_user.date,
+            'user': logged_user
         })
 
 @login_required
@@ -67,4 +68,24 @@ def show_post(request, id):
             'state': post.state,
             'date': post.date,
             'user': post.user
+        })
+    
+def show_my_posts(request):
+    if request.method == 'GET':
+        logged_user = request.user
+        myPosts = Publication.objects.filter(user=logged_user)
+        return render(request, 'my-posts.html',{
+            'myPosts' : myPosts
+        })
+    
+@login_required
+def show_my_post(request, id):
+    if request.method == 'GET':
+        post = get_object_or_404(Publication, id=id)
+        return render(request, 'view-my-post.html', {
+            'title': post.title,
+            'description': post.description,
+            'category': post.category,
+            'state': post.state,
+            'date': post.date,
         })

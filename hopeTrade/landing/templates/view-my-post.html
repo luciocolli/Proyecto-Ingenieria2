@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% csrf_token %}
+    <h2> {{ title }}</h2>
+
+    <div class="post">
+        <div class="info-publicacion">
+            <div>
+                <label>Descripción:</label> 
+                <span>{{ description }}</span>
+            </div>
+            <div>
+                <label>Estado:</label> 
+                <span>{{ state }}</span>
+            </div>
+            <div>
+                <label>Categoría:</label> 
+                <span>{{ category }}</span>
+            </div>
+            <div>
+                <label>Fecha de Vencimiento:</label> 
+                <span>{{ date }}</span>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock %}

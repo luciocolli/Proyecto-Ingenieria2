@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% csrf_token %}
+    <h1>Mis Publicaciones</h1>
+
+    {% for post in myPosts %}
+        <div>
+            <h2>{{ post.title }}</h2>
+            <form method="GET" action="{% url 'view-my-post' post.id %}">
+                <button type="submit">Ver Mi Publicacion</button>
+            </form>
+
+            <form method="GET" action="#">
+                <button type="submit">Eliminar Publicacion</button>
+            </form>
+            <form method="GET" action="#">
+                <button type="submit">Editar Mi Publicacion</button>
+            </form>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

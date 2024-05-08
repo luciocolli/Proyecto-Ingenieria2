@@ -6,6 +6,12 @@
 {% block content %}
     {% csrf_token %}
     <h1>Publicaciones</h1>
+    
+    <form method="GET" action="{% url 'crearPublicaciones' %}">
+        <button type="submit"> Crear Publicacion </button>
+    </form>
+    
+       
 
     {% for post in posts %}
 

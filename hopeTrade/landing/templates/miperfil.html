@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+{% extends 'base.html' %}
+
 
 {% block content %}
     {% csrf_token %}
@@ -26,6 +28,15 @@
             <label>Fecha:</label>
             <span>{{ date }}</span>
         </div>
+
+        <div>
+            <form method="GET" action="{% url 'my-posts' %}">
+                <button type="submit">Ver Publicaciones</button>
+            </form>
+        </div>
     </div>
+    
+   
+
 
 {% endblock %}

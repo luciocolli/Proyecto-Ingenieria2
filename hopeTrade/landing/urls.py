@@ -7,4 +7,6 @@ urlpatterns = [
     path('crear_publicacion/', views.createPublication, name= 'crearPublicaciones'),
     path('about/', views.about, name= 'about'),
     path('miperfil/', views.show_my_profile, name='miperfil'),
+    path('my-posts/', views.show_my_posts, name='my-posts'),
+    path('my-post/<int:id>', views.show_my_post, name= 'view-my-post')
 ]
