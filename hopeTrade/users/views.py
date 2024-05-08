@@ -60,7 +60,9 @@ def login_view(request):
             'form': CreatelogIn()
         })
     else:
-        if request.method == 'POST':
+
+        form = CreatelogIn(request.POST)
+        if form.is_valid():
             dni = request.POST['dni']
             password = request.POST['password']
             user = back.authenticate(request, dni=dni, password=password)
@@ -68,9 +70,10 @@ def login_view(request):
                 login(request, user)
                 return redirect('all-posts')
             else:
-                return redirect('register')
-        else:
-            return render(request, 'login.html')
+                form.add_error(
+                    'dni', 'DNI y/o contraseña incorrectos'
+                )
+        return render(request, 'login.html',{'form': form} )
 
 @login_required
 def view_profile(request, id):  # puse el id=2 porque se supone que me tiene que llegar como parametro el que fue seleccionado, pero no hicimos el ver publiciones
