@@ -12,4 +12,5 @@ urlpatterns = [
     path('user-exchages/', views.view_exchanges, name= 'user-exchanges'),
     path('user-ratings/', views.view_ratings, name= 'user-ratings'),
     path('logout/', views.user_logout, name='logout'),
-]
+] 
+
