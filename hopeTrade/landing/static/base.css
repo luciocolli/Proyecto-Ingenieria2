@@ -1,0 +1,47 @@
+.logo {
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 5px; /* Ajusta el relleno según sea necesario */
+    width: 220px; /* Ancho */
+    height: 50px; /* Alto */
+    margin:auto;
+}
+
+.logo h1 {
+    margin: 0;
+    width: 100%; /* Ancho */
+    text-decoration: none;
+}
+
+nav {
+    background-color: #61b0b2;
+    padding: 15px;
+    height: 150px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 60px 0 0; /* Mueve la lista hacia abajo */
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 10px;
+}
+
+nav ul li:last-child {
+    margin-right: 0; /* Elimina el margen derecho del último elemento */
+}
+
+nav ul li a {
+    color: #e8e8e7;
+    text-decoration: none;
+    padding: 10px 15px; /* Aumenta el padding */
+    border-radius: 5px;
+    background-color: #92b268;
+}
+
+nav ul li a:hover {
+    background-color: #79b18d;
+}
