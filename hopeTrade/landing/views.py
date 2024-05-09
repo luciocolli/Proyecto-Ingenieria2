@@ -3,7 +3,7 @@ from .models import Publication
 from django.db import IntegrityError
 from users.models import User
 from .forms import CreateNewPublication
-from django.contrib.auth.decorators import login_required, admin_required
+from django.contrib.auth.decorators import login_required
 from users.views import editarPerfil
 
 # Create your views here.
@@ -78,7 +78,7 @@ def show_my_profile(request):
             'date' : logged_user.date
         })
 
-@login_required
+@login_required  #Para ver Publicacion en la pagina principal
 def show_post(request, id):
     if request.method == 'GET':
         post = get_object_or_404(Publication, id=id)
@@ -89,4 +89,46 @@ def show_post(request, id):
             'state': post.state,
             'date': post.date,
             'user': post.user
+        })
+    
+
+def show_my_posts(request): # Para ver listado de mis publicaciones
+    if request.method == 'GET':
+        logged_user = request.user
+        myPosts = Publication.objects.filter(user=logged_user)
+        return render(request, 'my-posts.html',{
+            'myPosts' : myPosts
+        })
+
+@login_required
+def show_my_post(request, id):  # Para ver una publicacion propia
+    if request.method == 'GET':
+        post = get_object_or_404(Publication, id=id)
+        return render(request, 'view-my-post.html', {
+            'title': post.title,
+            'description': post.description,
+            'category': post.category,
+            'state': post.state,
+            'date': post.date,
+        })
+    
+def admin_posts(request):   
+    if request.method == 'GET':
+        posts = Publication.objects.all()
+        return render(request, 'admin-show-posts.html', {
+            'posts': posts
+        })
+    else:
+        posts = Publication.objects.all()
+        return render(request, 'admin-show-posts.html', {
+            'posts': posts
+        })
+        
+def delete_post(request, id):
+    if request.method == 'POST':
+        publicacion = get_object_or_404(Publication, id=id)
+        publicacion.delete()
+        posts = Publication.objects.all()
+        return render(request, 'admin-show-posts.html', {
+            'posts': posts
         })
