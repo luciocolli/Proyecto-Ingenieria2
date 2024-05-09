@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User
 from django.db import IntegrityError
-from .forms import CreateNewUser, CreatelogIn
+from .forms import CreateNewUser, CreatelogIn, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from . import backend as back
@@ -130,3 +131,30 @@ def asignar_colaborador(request):
                 mensaje = "Debes iniciar sesión para realizar esta acción"
 
     return render(request, 'asignar_colaborador.html', {'mensaje': mensaje})
+
+
+@login_required
+def editarPerfil(request):
+    user = request.user
+    
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            # Si se ha proporcionado una nueva contraseña
+            password_actual = form.cleaned_data.get('password_actual')
+            nueva_password = form.cleaned_data.get('nueva_password')
+
+            if password_actual and nueva_password:
+                if not user.password == password_actual:
+                    messages.error(request, 'La contraseña actual es incorrecta.')
+                    return redirect('editar-perfil')
+                user.password = nueva_password
+
+            # Mover el guardado del formulario aquí para asegurar que la verificación de la contraseña actual se realiza antes de guardar
+            form.save()
+            messages.success(request, 'Perfil actualizado con éxito.')
+            return redirect('editar-perfil')
+    else:
+        form = EditProfileForm(instance=user)
+    
+    return render(request, 'editar-perfil.html', {'form': form})
