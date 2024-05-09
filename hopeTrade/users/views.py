@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User
 from django.db import IntegrityError
-from .forms import CreateNewUser, CreatelogIn, EditProfileForm
+from .forms import CreateNewUser, CreatelogIn #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 
@@ -135,25 +135,38 @@ def asignar_colaborador(request):
 @login_required
 def editarPerfil(request):
     user = request.user
-    
+
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=user)
-        if form.is_valid():
-            # Si se ha proporcionado una nueva contraseña
-            password_actual = form.cleaned_data.get('password_actual')
-            nueva_password = form.cleaned_data.get('nueva_password')
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        date = request.POST.get('date')
+        mail = request.POST.get('mail')
+        password_actual = request.POST.get('password_actual')
+        nueva_password = request.POST.get('nueva_password')
 
-            if password_actual and nueva_password:
-                if not user.password == password_actual:
-                    messages.error(request, 'La contraseña actual es incorrecta.')
-                    return redirect('editar-perfil')
-                user.password = nueva_password
 
-            # Mover el guardado del formulario aquí para asegurar que la verificación de la contraseña actual se realiza antes de guardar
-            form.save()
-            messages.success(request, 'Perfil actualizado con éxito.')
+        
+        if (password_actual and not nueva_password) or (nueva_password and not password_actual):
+            messages.error(request, 'Debe proporcionar tanto la contraseña actual como la nueva contraseña para realizar cambios en la contraseña.')
             return redirect('editar-perfil')
-    else:
-        form = EditProfileForm(instance=user)
-    
-    return render(request, 'editar-perfil.html', {'form': form})
+
+        # Verificar si el usuario quiere cambiar la contraseña
+        if password_actual and nueva_password:
+            # Comprobar si la contraseña actual coincide con la del usuario
+            if not user.password == password_actual:
+                messages.error(request, 'La contraseña actual es incorrecta.')
+                return redirect('editar-perfil')
+            # Actualizar la contraseña
+            user.password = nueva_password
+        
+        # Actualizar los otros campos del perfil
+        user.name = name
+        user.surname = surname
+        user.date = date
+        user.mail = mail
+        user.save()
+
+        messages.success(request, 'Perfil actualizado con éxito.')
+        return redirect('editar-perfil')
+
+    return render(request, 'editar-perfil.html', {'user': user})

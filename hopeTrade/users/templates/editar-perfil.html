@@ -37,9 +37,33 @@
         
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div>
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" value="{{ user.name }}">
+            </div>
+            <div>
+                <label for="surname">Apellido:</label>
+                <input type="text" id="surname" name="surname" value="{{ user.surname }}">
+            </div>
+            <div>
+                <label for="date">Fecha:</label>
+                <input type="date" id="date" name="date" value="{{ user.date|date:'Y-m-d' }}">
+            </div>
+            <div>
+                <label for="mail">Email:</label>
+                <input type="email" id="mail" name="mail" value="{{ user.mail }}">
+            </div>
+            <div>
+                <label for="password_actual">Contraseña actual:</label>
+                <input type="password" id="password_actual" name="password_actual">
+            </div>
+            <div>
+                <label for="nueva_password">Nueva contraseña:</label>
+                <input type="password" id="nueva_password" name="nueva_password">
+            </div>
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
         </form>
     </div>
 </body>
 </html>
+

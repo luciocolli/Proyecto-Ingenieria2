@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Publication
 from django.db import IntegrityError
 from users.models import User
-from .forms import CreateNewPublication
+from .forms import CreateNewPublication, EditPublicationForm
 from django.contrib.auth.decorators import login_required
-from users.views import editarPerfil
+from users.views import editarPerfil #Sin uso era para ver si se solucionaba
+from django.contrib import messages
 
 # Create your views here.
 
@@ -51,6 +52,26 @@ def createPublication(request):
                     user=request.user  # esto retorna al usuario que se encuentra navegando en el sistema
                 )
                 return redirect('all-posts')
+
+@login_required
+def editPublication(request, publication_id):
+    publication = get_object_or_404(Publication, id=publication_id)
+
+    # Verifica si el usuario logueado es el creador de la publicación
+    if publication.user != request.user:
+        messages.error(request, "No tienes permiso para editar esta publicación.")
+        return redirect('all-posts')
+
+    if request.method == 'POST':
+        form = EditPublicationForm(request.POST, instance=publication)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "La publicación ha sido editada correctamente.")
+            return redirect('all-posts')
+    else:
+        form = EditPublicationForm(instance=publication)
+
+    return render(request, 'editPublication.html', {'form': form})
 
 @login_required
 def show_all_posts(request):
