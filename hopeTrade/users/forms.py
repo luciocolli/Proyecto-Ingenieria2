@@ -14,7 +14,7 @@ class CreateNewUser(forms.Form):
 
 class CreatelogIn(forms.Form) :
     dni = forms.IntegerField(label="Dni", max_value=9999999, widget = forms.TextInput())
-    password = forms.CharField(label="Contraseña", max_length=100, widget=forms.TextInput())
+    password = forms.CharField(label="Contraseña", max_length=100, widget=forms.PasswordInput())
 
 
 class EditProfileForm(forms.ModelForm):
