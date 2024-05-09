@@ -6,7 +6,6 @@ from .forms import CreateNewPublication, EditPublicationForm
 from django.contrib.auth.decorators import login_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
-from django.contrib import messages
 
 # Create your views here.
 
