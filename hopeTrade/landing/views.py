@@ -3,6 +3,7 @@ from .models import Publication
 from users.models import User
 from .forms import CreateNewPublication
 from django.contrib.auth.decorators import login_required
+from users.views import editarPerfil
 
 # Create your views here.
 
