@@ -9,4 +9,6 @@ urlpatterns = [
     path('miperfil/', views.show_my_profile, name='miperfil'),
     path('my-posts/', views.show_my_posts, name='my-posts'),
     path('my-post/<int:id>', views.show_my_post, name= 'view-my-post')
+    path('admin-show-posts', views.admin_posts, name= 'admin-posts'),
+    path('delete_post<int:id>', views.delete_post, name= 'delete_post')
 ]

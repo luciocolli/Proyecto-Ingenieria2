@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from landing import views as langin_views
+from django.contrib import admin
 
 urlpatterns = [
     path('', views.index, name= 'home'),
@@ -9,6 +10,7 @@ urlpatterns = [
     path('asignar-colaborador/', views.asignar_colaborador, name='asignar_colaborador'),
     path('editar-perfil/', views.editarPerfil, name='editar-perfil'),
     #path('all-posts/', langin_views.show_all_posts, name= 'all-posts'),
+    path('all-posts/', langin_views.show_all_posts, name= 'all-posts'),
     path('view-profile/<int:id>', views.view_profile, name= 'profile'),
     path('user-posts/', views.view_posts, name= 'user-posts'),
     path('user-exchages/', views.view_exchanges, name= 'user-exchanges'),

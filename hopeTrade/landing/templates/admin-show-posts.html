@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% csrf_token %}
+    <h1>Publicaciones</h1>
+
+    {% for post in posts %}
+
+    <div>
+        <h2> {{ post.title }} </h2>
+    
+        <p>Usuario: {{ post.user.name }}</p>
+        <form method="GET" action="{% url 'post' post.id %}">
+            <button type="submit">Ver Publicacion</button>
+        </form>
+        <form method="POST" action="{% url 'delete_post' post.id %}">
+            {% csrf_token %}
+            <button type="submit">Eliminar Publicacion</button>
+        </form>
+    </div>
+    
+    {% endfor %}
+
+
+{% endblock %}
