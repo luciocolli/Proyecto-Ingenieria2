@@ -12,8 +12,20 @@ header {
     color: #fff; /* color de texto blanco */
 }
 
+.logo {
+    color: #e8e8e7; /* Esto parece no ser necesario, ya que no estás utilizando color de texto en el div */
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 5px; /* Ajusta el relleno según sea necesario */
+    width: 220px; /* Ancho */
+    height: 50px; /* Alto */
+    margin:auto;
+}
+
 .logo h1 {
     margin: 0;
+    width: 100%; /* Ancho */
+    text-decoration: none;
 }
 
 nav ul {
@@ -42,6 +54,8 @@ nav ul li a:hover {
 h1 {
     color: #abb444;
     text-align: center;
+    
+
 }
 
 button {
@@ -60,4 +74,8 @@ button:hover {
 
 a {
     text-decoration: none;
+}
+
+a.principal{
+    width: 220px;
 }

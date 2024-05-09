@@ -42,7 +42,8 @@ def register(request):
                         name=request.POST['name'],
                         mail=request.POST['mail'],
                         date=request.POST['date'],
-                        password=request.POST['password']
+                        password=request.POST['password'],
+                        rol=3
                     )
                     return redirect('login')
                 except IntegrityError:
@@ -82,6 +83,7 @@ def login_view(request):
 @login_required
 def view_profile(request, id):  # puse el id=2 porque se supone que me tiene que llegar como parametro el que fue seleccionado, pero no hicimos el ver publiciones
     if request.method == 'GET':
+        print(type(request.user.rol))
         user = get_object_or_404(User, id=id)
         return render(request, 'view_profile.html', {
             'name': user.name,
