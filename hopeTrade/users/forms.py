@@ -1,6 +1,6 @@
 from django import forms
-from .models import User
-from . import backend as back
+#from .models import User
+#from . import backend as back
 
 class CreateNewUser(forms.Form):
     dni = forms.IntegerField(label="Dni", max_value=99999999, widget=forms.TextInput())
@@ -16,7 +16,7 @@ class CreatelogIn(forms.Form) :
     dni = forms.IntegerField(label="Dni", max_value=9999999, widget = forms.TextInput())
     password = forms.CharField(label="Contraseña", max_length=100, widget=forms.TextInput())
 
-
+'''
 class EditProfileForm(forms.ModelForm):
     password_actual = forms.CharField(widget=forms.PasswordInput, required=False)
     nueva_password = forms.CharField(widget=forms.PasswordInput, required=False)
@@ -50,3 +50,4 @@ class EditProfileForm(forms.ModelForm):
             raise forms.ValidationError('Se deben proporcionar la contraseña actual y la nueva contraseña.')
 
         return cleaned_data
+'''

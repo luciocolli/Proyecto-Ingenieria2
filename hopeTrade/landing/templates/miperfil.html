@@ -35,15 +35,8 @@
             </form>
             
             <div>
-                <a href="{% url 'editar-perfil' %}">BOTON</a>
-                
+                <a href="{% url 'editar-perfil' %}">Editar Perfil</a>
             </div>
-
-            <form action="{% url 'editar-perfil' %}" method="POST" >
-                {% csrf_token %}
-                
-                <button type="submit">Editar Perfil</button>
-            </form>
             
         </div>
     </div>
