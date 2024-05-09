@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from .forms import CreateNewUser, CreatelogIn
 from django.contrib.auth import login, authenticate, logout
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, admin_required
 from . import backend as back
 
 # Create your views here.
@@ -31,7 +31,7 @@ def register(request):
             # Calculate the years of the user
             date = form.cleaned_data['date']
             edad = back.get_years(date)
-
+            
             # If he´s 18 or older
             if edad >= 18:
                 try:
@@ -60,7 +60,6 @@ def login_view(request):
             'form': CreatelogIn()
         })
     else:
-
         form = CreatelogIn(request.POST)
         if form.is_valid():
             dni = request.POST['dni']
@@ -68,12 +67,16 @@ def login_view(request):
             user = back.authenticate(request, dni=dni, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('all-posts')
+                rol = user.rol
+                if int(rol) == 3:
+                    return redirect('admin-posts')
+                if int(rol) == 1:    
+                    return redirect('all-posts')
             else:
                 form.add_error(
                     'dni', 'DNI y/o contraseña incorrectos'
                 )
-        return render(request, 'login.html',{'form': form} )
+    return render(request, 'login.html',{'form': form} )
 
 @login_required
 def view_profile(request, id):  # puse el id=2 porque se supone que me tiene que llegar como parametro el que fue seleccionado, pero no hicimos el ver publiciones
@@ -103,13 +106,14 @@ def view_ratings(request):
     if request.method == 'GET':
         return render(request, 'user-ratings.html')
 
-
 @login_required
 def user_logout(request):
     logout(request)
     return redirect('home')
 
+@admin_required
 def asignar_colaborador(request):
+        
     mensaje = None
 
     if request.method == 'POST':
@@ -119,14 +123,9 @@ def asignar_colaborador(request):
         except User.DoesNotExist:
             mensaje = f"No se encuentra el usuario con el DNI {dni}"
         else:
-            if request.user.is_authenticated:  # Verificar si el usuario está autenticado
-                if request.user.rol == '3':
-                    usuario.rol = '2'
-                    usuario.save()
-                    mensaje = "Colaborador asignado correctamente"
-                else:
-                    mensaje = "No tienes los permisos para realizar esta acción"
-            else:
-                mensaje = "Debes iniciar sesión para realizar esta acción"
+            usuario.rol = 2
+            usuario.save()
+            mensaje = "Colaborador asignado correctamente"
 
     return render(request, 'asignar_colaborador.html', {'mensaje': mensaje})
+

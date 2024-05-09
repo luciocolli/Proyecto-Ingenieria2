@@ -128,7 +128,6 @@ LOGIN_URL = '/login/'
 
 LOGOUT_URL = '/'
 
-
 AUTH_USER_MODEL = 'users.User'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

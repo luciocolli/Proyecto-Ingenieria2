@@ -7,4 +7,6 @@ urlpatterns = [
     path('crear_publicacion/', views.createPublication, name= 'crearPublicaciones'),
     path('about/', views.about, name= 'about'),
     path('miperfil/', views.show_my_profile, name='miperfil'),
+    path('admin-show-posts', views.admin_posts, name= 'admin-posts'),
+    path('delete_post<int:id>', views.delete_post, name= 'delete_post')
 ]
