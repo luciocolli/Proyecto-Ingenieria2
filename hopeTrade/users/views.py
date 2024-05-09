@@ -135,10 +135,15 @@ def asignar_colaborador(request):
 
 @login_required
 def editarPerfil(request):
+
+    form = EditProfileForm()
+
+    request.session['recargado'] = True
+
     user = request.user
-    
+
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=user)
+        form = EditProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             # Si se ha proporcionado una nueva contraseña
             password_actual = form.cleaned_data.get('password_actual')
@@ -154,7 +159,6 @@ def editarPerfil(request):
             form.save()
             messages.success(request, 'Perfil actualizado con éxito.')
             return redirect('editar-perfil')
-    else:
-        form = EditProfileForm(instance=user)
+        
     
     return render(request, 'editar-perfil.html', {'form': form})

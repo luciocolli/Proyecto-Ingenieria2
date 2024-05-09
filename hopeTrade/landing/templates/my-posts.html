@@ -17,8 +17,8 @@
             <form method="GET" action="#">
                 <button type="submit">Eliminar Publicacion</button>
             </form>
-            <form method="GET" action="#">
-                <button type="submit">Editar Mi Publicacion</button>
+            <form method="GET" action="{% url 'edit-publication' post.id %}">
+                <button type="submit">Editar Mi Publicación</button>
             </form>
         </div>
 

@@ -20,7 +20,7 @@ class CreatelogIn(forms.Form) :
 class EditProfileForm(forms.ModelForm):
     password_actual = forms.CharField(widget=forms.PasswordInput, required=False)
     nueva_password = forms.CharField(widget=forms.PasswordInput, required=False)
-
+    
     class Meta:
         model = User
         fields = ['name', 'surname', 'date', 'mail']
@@ -34,7 +34,6 @@ class EditProfileForm(forms.ModelForm):
 
 
         #Si saco este chequeo se rompe la pagina
-        #Asi no se rompe pero no funciona como tendria que hacer
         if anios is None:
             raise forms.ValidationError('La fecha de nacimiento es requerida.')
 

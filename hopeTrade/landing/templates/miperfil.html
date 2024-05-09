@@ -33,9 +33,15 @@
             <form method="GET" action="{% url 'my-posts' %}">
                 <button type="submit">Ver Publicaciones</button>
             </form>
+            
+            <div>
+                <a href="{% url 'editar-perfil' %}">BOTON</a>
+                
+            </div>
 
-            <form method="POST" action="{% url 'editar-perfil' %}">
+            <form action="{% url 'editar-perfil' %}" method="POST" >
                 {% csrf_token %}
+                
                 <button type="submit">Editar Perfil</button>
             </form>
             
