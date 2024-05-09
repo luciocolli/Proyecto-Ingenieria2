@@ -6,6 +6,7 @@ from .forms import CreateNewPublication, EditPublicationForm
 from django.contrib.auth.decorators import login_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
+from django.contrib import messages
 
 # Create your views here.
 
@@ -79,8 +80,15 @@ def show_all_posts(request):
         logged_user = request.user
         # Tomo las publicaciones de todos los usuarios menos del que se encuentra logueado
         posts = Publication.objects.exclude(user=logged_user.id)
+        
+        if not posts:
+            message = 'No hay publicaciones disponibles'
+        else:
+            message = None
+
         return render(request, 'show-all-posts.html', {
-            'posts': posts
+            'posts': posts,
+            'msg': message
         })
 
 
@@ -117,8 +125,15 @@ def show_my_posts(request): # Para ver listado de mis publicaciones
     if request.method == 'GET':
         logged_user = request.user
         myPosts = Publication.objects.filter(user=logged_user)
+
+        if not myPosts:
+            message = 'No hay publicaciones disponibles'
+        else:
+            message = None
+
         return render(request, 'my-posts.html',{
-            'myPosts' : myPosts
+            'myPosts' : myPosts,
+            'msg': message
         })
 
 @login_required

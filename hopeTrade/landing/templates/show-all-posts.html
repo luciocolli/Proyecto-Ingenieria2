@@ -13,7 +13,12 @@
         <button type="submit"> Crear Publicacion </button>
     </form>
     
-       
+    {% if msg %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ msg }}
+    </div>
+    {% endif %}
+
 
     {% for post in posts %}
 
