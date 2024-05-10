@@ -8,13 +8,13 @@
 <body>
     <nav>
         <div class="logo">
-            <h1>HopeTrade</h1>
+            <h1 class="logito">HopeTrade</h1>
         </div>
         <ul>
             <li>
                 <a href="{% url 'all-posts' %}">Home</a>
             </li>
-            {% if request.user.rol == "2" %}
+            {% if request.user.rol == "3" %}
                 <li>
                     <a href="{% url 'all-posts' %}">Ver intercambios del dia</a>
                 </li>

@@ -7,11 +7,11 @@
     margin:auto;
 }
 
-.logo h1 {
-    margin: 0;
-    width: 100%; /* Ancho */
-    text-decoration: none;
+.logito {
+    text-align: center; /* Para centrar el texto */
+    color: #abb444; /* Para establecer el color */
 }
+
 
 nav {
     background-color: #61b0b2;
