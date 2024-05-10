@@ -8,9 +8,10 @@ class CreateNewPublication(forms.Form):
     #category = forms.CharField(label='Categoria', max_length=100, widget=forms.TextInput())
     state = forms.CharField(label='Estado del Producto', max_length=100, widget=forms.TextInput())
     date = forms.DateField(label='Fecha de Vencimiento', widget=forms.DateInput(attrs={'type': 'date'}) )
+    file = forms.CharField(label= 'Nombre del archivo png', max_length=100, widget=forms.TextInput())
     
 class EditPublicationForm(forms.ModelForm):
     class Meta:
         model = Publication
-        exclude = ['user']
+        exclude = ['user', 'file']
 

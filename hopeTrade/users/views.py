@@ -6,7 +6,7 @@ from .forms import CreateNewUser, CreatelogIn #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, admin_required
 from . import backend as back
 
 # Create your views here.
@@ -114,6 +114,7 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
+@admin_required
 def asignar_colaborador(request):
         
     mensaje = None
