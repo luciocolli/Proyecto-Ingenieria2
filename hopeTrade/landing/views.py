@@ -3,7 +3,7 @@ from .models import Publication
 from django.db import IntegrityError
 from users.models import User
 from .forms import CreateNewPublication, EditPublicationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
 
@@ -56,22 +56,23 @@ def createPublication(request):
 @login_required
 def editPublication(request, publication_id):
     publication = get_object_or_404(Publication, id=publication_id)
-
+    mensaje = None
     # Verifica si el usuario logueado es el creador de la publicación
     if publication.user != request.user:
-        messages.error(request, "No tienes permiso para editar esta publicación.")
-        return redirect('all-posts')
+        mensaje = "No tienes permiso para editar esta publicación."
 
     if request.method == 'POST':
         form = EditPublicationForm(request.POST, instance=publication)
         if form.is_valid():
             form.save()
-            messages.success(request, "La publicación ha sido editada correctamente.")
-            return redirect('all-posts')
+            mensaje = "Se han guardado los cambios."
     else:
         form = EditPublicationForm(instance=publication)
 
-    return render(request, 'editPublication.html', {'form': form})
+    return render(request, 'editPublication.html', {
+                  'form': form,
+                   'mensaje': mensaje
+                 })
 
 @login_required
 def show_all_posts(request):
@@ -110,13 +111,15 @@ def show_my_profile(request):
 def show_post(request, id):
     if request.method == 'GET':
         post = get_object_or_404(Publication, id=id)
+        print(post.file)
         return render(request, 'view-post.html', {
             'title': post.title,
             'description': post.description,
             'category': post.category,
             'state': post.state,
             'date': post.date,
-            'user': post.user
+            'user': post.user,
+            'file' : post.file
         })
     
 
@@ -147,6 +150,7 @@ def show_my_post(request, id):  # Para ver una publicacion propia
             'date': post.date,
         })
     
+@admin_required
 def admin_posts(request):   
     if request.method == 'GET':
         posts = Publication.objects.all()
@@ -158,7 +162,8 @@ def admin_posts(request):
         return render(request, 'admin-show-posts.html', {
             'posts': posts
         })
-        
+
+@admin_required
 def delete_post(request, id):
     if request.method == 'POST':
         publicacion = get_object_or_404(Publication, id=id)
