@@ -10,5 +10,5 @@ class Publication(models.Model):
     state = models.CharField(max_length=100)
     date = models.DateField()  # Vencimiento
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    file = models.CharField(max_length=100, default= 'Sin_foto.png')
+    file = models.CharField(max_length=100, default= 'Sin_foto.png', blank=True)
     
