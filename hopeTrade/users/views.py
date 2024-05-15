@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from .forms import CreateNewUser, CreatelogIn #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required, admin_required
 from . import backend as back
@@ -143,11 +144,15 @@ def editarPerfil(request):
         password_actual = request.POST.get('password_actual')
         nueva_password = request.POST.get('nueva_password')
 
-
+        edad = back.get_years(datetime.strptime(date, '%Y-%m-%d').date())
+        if edad < 18:
+            messages.error(request, 'Debes ser mayor de 18 años para modificar tu perfil.')
+            return redirect('editar-perfil')
         
         if (password_actual and not nueva_password) or (nueva_password and not password_actual):
             messages.error(request, 'Debe proporcionar tanto la contraseña actual como la nueva contraseña para realizar cambios en la contraseña.')
             return redirect('editar-perfil')
+
 
         # Verificar si el usuario quiere cambiar la contraseña
         if password_actual and nueva_password:

@@ -14,4 +14,9 @@ class EditPublicationForm(forms.ModelForm):
     class Meta:
         model = Publication
         exclude = ['user', 'file']
+        widgets = {
+            'category': forms.Select(choices=[('alimento', 'Alimento'), ('limpieza', 'Limpieza'), ('higiene', 'Higiene'), ('electrodomestico', 'Electrodomestico'), ('jueguete', 'Juguetes')]),
+            'state': forms.Select(choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')]),
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
         
