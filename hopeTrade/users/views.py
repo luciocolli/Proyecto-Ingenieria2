@@ -71,7 +71,7 @@ def login_view(request):
                 rol = user.rol
                 if int(rol) == 3:
                     return redirect('admin-posts')
-                if int(rol) == 1:    
+                else:
                     return redirect('all-posts')
             else:
                 form.add_error(
