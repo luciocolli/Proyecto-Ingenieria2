@@ -15,7 +15,7 @@
             <li>
                 <a href="{% url 'all-posts' %}">Home</a>
             </li>
-            {% if request.user.rol == "3" %}
+            {% if request.user.rol == "2" %}
                 <li>
                     <a href="{% url 'all-posts' %}"> Ver intercambios del dia </a>
                 </li>
