@@ -42,8 +42,7 @@ def register(request):
                         name=request.POST['name'],
                         mail=request.POST['mail'],
                         date=request.POST['date'],
-                        password=request.POST['password'],
-                        rol=3
+                        password=request.POST['password']
                     )
                     return redirect('login')
                 except IntegrityError:
@@ -131,7 +130,6 @@ def asignar_colaborador(request):
             mensaje = "Colaborador asignado correctamente"
 
     return render(request, 'asignar_colaborador.html', {'mensaje': mensaje})
-
 
 @login_required
 def editarPerfil(request):
