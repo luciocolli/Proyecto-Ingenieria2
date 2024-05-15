@@ -12,11 +12,15 @@
         </div>
         <ul>
             <li>
-                <a href="{% url 'all-posts' %}">Home</a>
+                {% if request.user.rol == "3" %}
+                    <a href="{% url 'admin-posts' %}">Home</a>
+                {% else %}
+                    <a href="{% url 'all-posts' %}">Home</a>
+                {% endif %}
             </li>
-            {% if request.user.rol == "2" %}
+            {% if request.user.rol == "2" or request.user.rol == "3" %}
                 <li>
-                    <a href="{% url 'all-posts' %}"> Ver intercambios del dia </a>
+                    <a href="#"> Ver intercambios del dia </a> <!--agregar ruta de intercambios del dia-->
                 </li>
             {% endif %}
             {% if request.user.rol == "3" %}
