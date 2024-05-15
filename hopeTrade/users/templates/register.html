@@ -1,16 +1,31 @@
 <!DOCTYPE html>
-{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+    <link rel="stylesheet" href="../static/register.css"
+</head>
+
+<body>
+    {% block content %}
+
+
 
 
     <h1>Register</h1>
-
-    <form method="POST">
-        {% csrf_token %}
-        {{form}}
-        <button>
-            Registrar
-        </button>
-    </form>
-
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            {{form}}
+            <button>
+                Registrate
+            </button>
+        </form>
+        <p>¿Ya tienes una cuenta? <a href= "{% url 'login' %}" >Inicia sesion aqui</a></p>
+    </div>
 
 {% endblock %}
+</body>
+
+

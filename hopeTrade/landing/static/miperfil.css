@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e8e8e7;
+    color: #000; /* color de texto negro */
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #abb444; 
+    text-align: center;
+}
+
+.containerGeneral {
+    text-align: left;
+    display: inline-block;
+    background-color: #61b0b2;
+    height: 500px;
+}
+
+.containerGeneral label {
+    margin-left: 30px;
+}
+
+.divFormulario {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+button {
+    color: #fff; 
+    background-color: #abb444; 
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+button:hover {
+    background-color: #92b268;
+}
+
+a {
+    color: #abb444;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
