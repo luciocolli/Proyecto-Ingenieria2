@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block content %}
 {% csrf_token %}
@@ -24,6 +24,9 @@
             <div>
                 <label>Fecha de Vencimiento:</label> 
                 <span>{{ date }}</span>
+            </div>
+            <div>
+                <img src="{% static file  %}", width="350">
             </div>
         </div>
     </div>

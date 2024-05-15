@@ -79,3 +79,11 @@ a {
 a.principal{
     width: 220px;
 }
+
+.logoHopeTrade{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #61b0b2;
+}

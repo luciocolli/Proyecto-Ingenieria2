@@ -52,11 +52,14 @@ def createPublication(request):
                     user=request.user  # esto retorna al usuario que se encuentra navegando en el sistema
                 )
                 return redirect('all-posts')
+        else:
+            return render(request, 'createPublication.html', {'form': form})
 
 @login_required
 def editPublication(request, publication_id):
     publication = get_object_or_404(Publication, id=publication_id)
     mensaje = None
+    
     # Verifica si el usuario logueado es el creador de la publicación
     if publication.user != request.user:
         mensaje = "No tienes permiso para editar esta publicación."
@@ -64,15 +67,19 @@ def editPublication(request, publication_id):
     if request.method == 'POST':
         form = EditPublicationForm(request.POST, instance=publication)
         if form.is_valid():
-            form.save()
-            mensaje = "Se han guardado los cambios."
+            new_title = form.cleaned_data['title'] 
+            encontre = Publication.objects.filter(user = publication.user, title = new_title).exclude(id=publication.id).exists()
+            if not encontre:
+                form.save()
+                mensaje = "Se han guardado los cambios."
+            else:
+                mensaje = "Ya posees una publicacion con este titulo"
     else:
         form = EditPublicationForm(instance=publication)
-
     return render(request, 'editPublication.html', {
-                  'form': form,
-                   'mensaje': mensaje
-                 })
+        'form': form,
+        'mensaje': mensaje
+    })
 
 @login_required
 def show_all_posts(request):
@@ -148,6 +155,7 @@ def show_my_post(request, id):  # Para ver una publicacion propia
             'category': post.category,
             'state': post.state,
             'date': post.date,
+            'file': post.file
         })
     
 @admin_required

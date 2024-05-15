@@ -123,7 +123,7 @@ def asignar_colaborador(request):
         try:
             usuario = User.objects.get(dni=dni)
         except User.DoesNotExist:
-            mensaje = f"No se encuentra el usuario con el DNI {dni}"
+            mensaje = f"El DNI ingresado no existe."
         else:
             usuario.rol = 2
             usuario.save()
