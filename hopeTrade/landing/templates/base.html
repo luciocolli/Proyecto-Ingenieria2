@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="../static/base.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
 </head>
 <body>
     <nav>
@@ -25,12 +26,22 @@
             <li>
                 <a href="{% url 'about' %}">Sobre Nosotros</a>
             </li>
-            <li>
-                <a href="{% url 'logout' %}">Cerrar Sesion</a>
+            <li onclick="cerrarSesion(event)">
+                <a href="{% url 'logout' %}"></button>Cerrar Sesion</a>
             </li>
             
         </ul>
     </nav>
+
+    <script>
+        function cerrarSesion(e){
+            if (confirm("Seguro que quieres cerrar sesion?")) {
+                 window.location.reload()
+            } else {
+                e.preventDefault()
+            }
+        }
+    </script>
 
     {% block content %}
     {% endblock %}

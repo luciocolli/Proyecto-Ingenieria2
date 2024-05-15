@@ -1,44 +1,44 @@
 <!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HopeTrade</title>
+    <link rel="stylesheet" href="../static/miperfil.css">
+</head>
+
 
 {% extends 'base.html' %}
 
 
 {% block content %}
     {% csrf_token %}
-
-    <div>
-        <h1>Mi perfil</h1>
-        <div>
+    <h1>Mi perfil</h1>
+    <div class="containerGeneral">
             <label>Nombre:</label>
             <span>{{ name }}</span>
-        </div>
-        <div>
+        
+        
             <label>Apellido:</label>
             <span>{{ surname }}</span>
-        </div>
-        <div>
+        
             <label>Email:</label>
             <span>{{ mail }}</span>
-        </div>
-        <div>
+       
             <label>DNI:</label>
             <span>{{ dni }}</span>
-        </div>
-        <div>
+        
             <label>Fecha:</label>
             <span>{{ date }}</span>
-        </div>
 
-        <div>
-            <form method="GET" action="{% url 'my-posts' %}">
-                <button type="submit">Ver Publicaciones</button>
-            </form>
-            
-            <div>
-                <a href="{% url 'editar-perfil' %}">Editar Perfil</a>
+
+            <div class="divFormulario">
+                <form method="GET" action="{% url 'my-posts' %}">
+                    <button type="submit">Ver Publicaciones</button>
+                </form>
             </div>
-            
-        </div>
+            <div class="divEditar">
+                <a href="{% url 'editar-perfil' %}"><button>Editar Perfil</button></a>
+            </div>
     </div>
     
    
