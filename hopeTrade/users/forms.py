@@ -14,7 +14,7 @@ class CreateNewUser(forms.Form):
 
 
 class CreatelogIn(forms.Form) :
-    dni = forms.IntegerField(label="Dni", max_value=9999999, widget = forms.TextInput(), error_messages={'invalid': 'Este campo debe contenter solo números',
+    dni = forms.IntegerField(label="Dni", max_value=99999999, widget = forms.TextInput(), error_messages={'invalid': 'Este campo debe contenter solo números',
                                                                                                          'max_value': 'El DNI ingresado no existe.'})
     password = forms.CharField(label="Contraseña", max_length=100, widget=forms.PasswordInput())
 
