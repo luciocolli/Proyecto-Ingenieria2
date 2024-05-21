@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User
+from landing.models import Publication
 from django.db import IntegrityError
 from .forms import CreateNewUser, CreatelogIn #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
@@ -83,18 +84,30 @@ def view_profile(request, id):  # puse el id=2 porque se supone que me tiene que
     if request.method == 'GET':
         print(type(request.user.rol))
         user = get_object_or_404(User, id=id)
+        print(type(user.id))
         return render(request, 'view_profile.html', {
             'name': user.name,
             'surname': user.surname,
             'email': user.mail,
-            'calification': back.calculate_califications()
+            'calification': back.calculate_califications(),
+            'id': user.id
         })
 
 @login_required
-def view_posts(request):
+def view_posts(request, id):
     if request.method == 'GET':
+        posts = Publication.objects.filter(user = id) # user en Publication es el campo que contiene solo el id del dueño de la publicacion
+        owner = User.objects.get(id = id)  # busco al dueño
+        
+        if not posts:
+            msg = 'El usuario no tiene publicaciones disponibles'
+        else:
+            msg = None
+
         return render(request, 'user-posts.html',{
-            'auth' : request.user.is_authenticated
+            'name': owner.name,
+            'posts' : posts,
+            'msg': msg
         })
 
 @login_required

@@ -4,6 +4,25 @@
 
 {% block content %}
     {% csrf_token %}
-    <h1> Publicaciones del usuario  {{ auth }}</h1>
+    <h1> Publicaciones de {{ name }}</h1>
+
+    {% if msg %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ msg }}
+    </div>
+    {% endif %}
+
+    {% for post in posts %}
+
+    <div>
+        <h2> {{ post.title }} </h2>
+    
+        <p>Usuario: {{ post.user.name }}</p>
+        <form method="GET" action="{% url 'post' post.id %}">
+            <button type="submit">Ver Publicacion</button> <!-- Antes decia Ver Usuario -->
+        </form> 
+    </div>
+    
+    {% endfor %}
 
 {% endblock %}

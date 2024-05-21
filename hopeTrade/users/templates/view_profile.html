@@ -11,7 +11,7 @@
     <p>Email: {{ email }}</p>
     <p>Calificación: {{ calification }}</p>
     <br>
-    <a href="#"><button>Ver Publicaciones</button></a>  <!--{% url 'user-posts' %}-->
+    <a href="{% url 'user-posts' id %}"><button>Ver Publicaciones</button></a>  
     <a href="#"><button>Ver Intercambios</button></a>  <!--{% url 'user-exchanges' %}-->
     <a href="#"><button>Ver Calificaciones</button></a> <!--{% url 'user-ratings' %}-->
 
