@@ -118,17 +118,11 @@ def user_logout(request):
 def view_asignar_colaborador(request):
   
     if request.method == 'GET':
-        users = User.objects.all()
-
-        if not users:
-            message = 'No hay publicaciones disponibles'
-        else:
-            message = None
-          
+        logged_user = request.user
+        users = User.objects.exclude(id=logged_user.id)
 
         return render(request, 'asignar_colaborador.html',{
-            'users': users,
-            'msg': message
+            'users': users
         })
 
 @login_required
