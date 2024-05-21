@@ -8,7 +8,11 @@ class Publication(models.Model):
     description = models.CharField(max_length=500)
     category = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
-    date = models.DateField()  # Vencimiento
+    date = models.DateField(null=True, blank= True)  # Vencimiento
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     file = models.CharField(max_length=100, default= 'Sin_foto.png', blank=True)
-    
+
+class Offer(models.Model):
+    description = models.TextField(max_length=500)
+    user = models.ForeignKey(User, on_delete= models.DO_NOTHING)
+    post = models.ForeignKey(Publication, on_delete= models.DO_NOTHING)

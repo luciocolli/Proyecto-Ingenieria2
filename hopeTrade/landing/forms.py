@@ -1,5 +1,13 @@
 from django import forms
 from .models import Publication
+from hopeTrade.settings import STATIC_URL, BASE_DIR
+import os
+
+
+def get_png_files():
+    static_dir = os.path.join(BASE_DIR, "landing",STATIC_URL)
+    png_files = [f for f in os.listdir(static_dir) if f.endswith('.png')]
+    return [(f, f) for f in png_files]
 
 class CreateNewPublication(forms.Form):
     title = forms.CharField(label='Titulo', max_length=200, widget=forms.TextInput())
@@ -7,8 +15,9 @@ class CreateNewPublication(forms.Form):
     category = forms.ChoiceField(label='Categoria', choices=[('alimento', 'Alimento'), ('limpieza', 'Limpieza'), ('higiene', 'Higiene'), ('electrodomestico', 'Electrodomestico'), ('jueguete', 'Juguetes')], widget=forms.Select())
     #category = forms.CharField(label='Categoria', max_length=100, widget=forms.TextInput())
     state = forms.ChoiceField(label='Estado del Producto', choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')], widget=forms.Select())
-    date = forms.DateField(label='Fecha de Vencimiento', widget=forms.DateInput(attrs={'type': 'date'}) )
-    file = forms.CharField(label= 'Nombre del archivo png', max_length=100, widget=forms.TextInput(), required=False)
+    date = forms.DateField(label='Fecha de Vencimiento', widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    file = forms.ChoiceField(label= 'Nombre del archivo png', choices= get_png_files(), required=False)
+
     
 class EditPublicationForm(forms.ModelForm):
     class Meta:

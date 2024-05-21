@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Publication
+from .models import Publication, Offer
 from django.db import IntegrityError
 from users.models import User
 from .forms import CreateNewPublication, EditPublicationForm
@@ -35,6 +35,7 @@ def createPublication(request):
             new_title = request.POST['title']
             post_owner = request.user
             exists_title = Publication.objects.filter(user= post_owner, title= new_title).exists()
+            cleaned_date = form.cleaned_data['date'] # The date is cleaned in case it's empty
             # This conditional checks if the user that is creating the post already has one with the same title
             if exists_title:
                 # In this case, the user is notified
@@ -48,8 +49,9 @@ def createPublication(request):
                     description=request.POST['description'],
                     category=request.POST['category'],
                     state=request.POST['state'],
-                    date=request.POST['date'],
-                    user=request.user  # esto retorna al usuario que se encuentra navegando en el sistema
+                    date=cleaned_date,
+                    user=request.user,  # esto retorna al usuario que se encuentra navegando en el sistema
+                    file= request.POST['file']
                 )
                 return redirect('all-posts')
         else:
@@ -57,11 +59,15 @@ def createPublication(request):
 
 @login_required
 def editPublication(request, publication_id):
+
+    def hasOffers(user):
+        return Offer.objects.exists(user)
+    
     publication = get_object_or_404(Publication, id=publication_id)
     mensaje = None
     
     # Verifica si el usuario logueado es el creador de la publicación
-    if publication.user != request.user:
+    if publication.user != request.user and not hasOffers(publication.user):
         mensaje = "No tienes permiso para editar esta publicación."
 
     if request.method == 'POST':
@@ -81,6 +87,8 @@ def editPublication(request, publication_id):
         'mensaje': mensaje
     })
 
+
+
 @login_required
 def show_all_posts(request):
     if request.method == 'GET':
@@ -94,6 +102,7 @@ def show_all_posts(request):
             message = None
 
         return render(request, 'show-all-posts.html', {
+            'nombre_usuario' : logged_user.name,
             'posts': posts,
             'msg': message
         })

@@ -6,12 +6,10 @@ from .forms import CreateNewUser, CreatelogIn #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from datetime import datetime
-
 from django.contrib.auth.decorators import login_required, admin_required
 from . import backend as back
 
 # Create your views here.
-
 
 def index(request):
     return render(request, 'index.html')

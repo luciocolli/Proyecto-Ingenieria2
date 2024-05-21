@@ -27,8 +27,10 @@
                 <span>{{ category }}</span>
             </div>
             <div>
-                <label>Fecha de Vencimiento:</label> 
-                <span>{{ date }}</span>
+                {% if date != null %}
+                    <label>Fecha de Vencimiento:</label> 
+                    <span>{{ date }}</span>
+                {% endif %}
             </div>
             <img src="{% static file %}", width="350">
             <form method="GET" action='#'>
