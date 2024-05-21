@@ -3,14 +3,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
     <h1>Asignar Colaborador</h1>
-    {% if mensaje %}
-    <div>{{ mensaje }}</div>
+
+    <h2>Lista de Usuarios</h1>
+    {% if msg %}
+        <div>{{ msg }}</div>
     {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        <label for="dni">DNI:</label>
-        <input type="text" id="dni" name="dni">
-        <button type="submit">Asignar Colaborador</button>
-    </form>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Dni</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.dni }}</td>
+                <td>{{ user.rol }}</td>
+                <td>
+                    <form action="{% url 'change-rol' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="dni" value="{{ user.dni }}">
+                        <button type="submit" >Asignar Colaborador</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}

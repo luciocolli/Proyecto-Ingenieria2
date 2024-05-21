@@ -115,22 +115,32 @@ def user_logout(request):
     return redirect('home')
 
 @admin_required
-def asignar_colaborador(request):
-        
-    mensaje = None
+def view_asignar_colaborador(request):
+  
+    if request.method == 'GET':
+        users = User.objects.all()
 
+        if not users:
+            message = 'No hay publicaciones disponibles'
+        else:
+            message = None
+          
+
+        return render(request, 'asignar_colaborador.html',{
+            'users': users,
+            'msg': message
+        })
+
+@login_required
+def asignar_colaborador(request):
+    
     if request.method == 'POST':
         dni = request.POST.get('dni')
-        try:
-            usuario = User.objects.get(dni=dni)
-        except User.DoesNotExist:
-            mensaje = f"El DNI ingresado no existe."
-        else:
-            usuario.rol = 2
-            usuario.save()
-            mensaje = "Colaborador asignado correctamente"
+        user = get_object_or_404(User, dni=dni)
+        user.rol = 2  # Cambia al rol deseado
+        user.save()
+    return redirect('view_asignar_colaborador')
 
-    return render(request, 'asignar_colaborador.html', {'mensaje': mensaje})
 
 @login_required
 def editarPerfil(request):
