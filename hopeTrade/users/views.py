@@ -15,7 +15,6 @@ from . import backend as back
 def index(request):
     return render(request, 'index.html')
 
-
 def register(request):
 
     if request.method == 'GET':
@@ -53,7 +52,6 @@ def register(request):
                     'date', 'Debes ser mayor de 18 años para poder registrarte')
         return render(request, 'register.html', {'form': form})
 
-
 def login_view(request):
 
     if request.method == 'GET':
@@ -66,6 +64,13 @@ def login_view(request):
             dni = request.POST['dni']
             password = request.POST['password']
             user = back.authenticate(request, dni=dni, password=password)
+            # ACORDARME DE SACAR ESTO
+            #---------------------------------------------------------------------------------------
+            if back.enviarMail(user.mail, f'{user.name} gay', f'Hola {user.name}, como andas'):
+                print('Mail se envio bien') 
+            else:
+                print("Mail sale mal")
+            #---------------------------------------------------------------------------------------
             if user is not None:
                 login(request, user)
                 rol = user.rol
@@ -145,7 +150,6 @@ def asignar_colaborador(request):
         user.rol = 2  # Cambia al rol deseado
         user.save()
     return redirect('view_asignar_colaborador')
-
 
 @login_required
 def editarPerfil(request):

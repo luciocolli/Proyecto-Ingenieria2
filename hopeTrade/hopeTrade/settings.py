@@ -131,3 +131,12 @@ LOGOUT_URL = '/'
 AUTH_USER_MODEL = 'users.User'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+#COSAS DE MAILS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # o el servidor SMTP que uses
+EMAIL_PORT = 587  # o el puerto que necesites
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hopetrade.email@gmail.com'  # tu dirección de correo
+EMAIL_HOST_PASSWORD = 'kkxf jzua bqby uzxg'  # tu contraseña de correo
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # para usar esta dirección por defecto

@@ -6,7 +6,7 @@ from .forms import CreateNewPublication, EditPublicationForm
 from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
-
+from users import backend as back
 # Create your views here.
 
 
@@ -184,6 +184,7 @@ def admin_posts(request):
 def delete_post(request, id):
     if request.method == 'POST':
         publicacion = get_object_or_404(Publication, id=id)
+        back.enviarMail(publicacion.user.mail,'Publicación eliminada', f'Hola {publicacion.user.name}, tu publicación a sido eliminada porque era indebida')
         publicacion.delete()
         posts = Publication.objects.all()
         return render(request, 'admin-show-posts.html', {
