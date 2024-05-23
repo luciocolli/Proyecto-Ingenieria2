@@ -167,7 +167,7 @@ def show_my_post(request, id):  # Para ver una publicacion propia
             'file': post.file
         })
     
-@admin_required
+#@admin_required
 def admin_posts(request):   
     if request.method == 'GET':
         posts = Publication.objects.all()
@@ -180,11 +180,15 @@ def admin_posts(request):
             'posts': posts
         })
 
-@admin_required
+#COMENTO XQ NO ME FUNCIONA (RAMI)
+#@admin_required
 def delete_post(request, id):
     if request.method == 'POST':
         publicacion = get_object_or_404(Publication, id=id)
-        back.enviarMail(publicacion.user.mail,'Publicación eliminada', f'Hola {publicacion.user.name}, tu publicación a sido eliminada porque era indebida')
+        if back.enviarMail(publicacion.user.mail,'Publicación eliminada', f'Hola {publicacion.user.name}, tu publicación {publicacion.title} a sido eliminada porque era indebida'):
+            print('Mail salio bien') #Eliminar los print cdo funcione todo
+        else:
+            print  ('Mail salio mal')
         publicacion.delete()
         posts = Publication.objects.all()
         return render(request, 'admin-show-posts.html', {

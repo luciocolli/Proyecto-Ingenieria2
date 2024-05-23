@@ -66,7 +66,7 @@ def login_view(request):
             user = back.authenticate(request, dni=dni, password=password)
             # ACORDARME DE SACAR ESTO
             #---------------------------------------------------------------------------------------
-            if back.enviarMail(user.mail, f'{user.name} gay', f'Hola {user.name}, como andas'):
+            if back.enviarMail(user.mail, 'Sesión iniciada', f'Hola {user.name}, se detectó un inicio de sesión.'):
                 print('Mail se envio bien') 
             else:
                 print("Mail sale mal")
@@ -85,7 +85,7 @@ def login_view(request):
     return render(request, 'login.html',{'form': form} )
 
 @login_required
-def view_profile(request, id):  # puse el id=2 porque se supone que me tiene que llegar como parametro el que fue seleccionado, pero no hicimos el ver publiciones
+def view_profile(request, id):
     if request.method == 'GET':
         print(type(request.user.rol))
         user = get_object_or_404(User, id=id)
