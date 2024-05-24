@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HopeTrade</title>
+    <link rel="stylesheet" href="../static/show-posts.css">
+</head>
+
 {% extends 'base.html' %}
 
 
@@ -9,23 +16,46 @@
     <form method="GET" action="{% url 'crearPublicaciones' %}">
         <button type="submit"> Crear Publicacion </button>
     </form>
+    <div class="container">
+        <div class="filters">
+            <form method="GET" action="{% url 'admin-posts' %}">
+                <div>
+                    <h3>Filtrar por Categorías:</h3>
+                    <label><input type="checkbox" name="category" value="alimento"> Alimento</label><br>
+                    <label><input type="checkbox" name="category" value="limpieza"> Limpieza</label><br>
+                    <label><input type="checkbox" name="category" value="higiene"> Higiene</label><br>
+                    <label><input type="checkbox" name="category" value="electrodomestico"> Electrodoméstico</label><br>
+                    <label><input type="checkbox" name="category" value="juguete"> Juguete</label><br>
+                </div>
+                <button type="submit">Filtrar Publicaciones</button>
+            </form>
+        </div>
 
-    {% for post in posts %}
+        <div class="posts">
+            {% if msg %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ msg }}
+            </div>
+            {% endif %}
 
-    <div>
-        <h2> {{ post.title }} </h2>
-    
-        <p>Usuario: {{ post.user.name }}</p>
-        <form method="GET" action="{% url 'post' post.id %}">
-            <button type="submit">Ver Publicacion</button>
-        </form>
-        <form method="POST" action="{% url 'delete_post' post.id %}">
-            {% csrf_token %}
-            <button type="submit">Eliminar Publicacion</button>
-        </form>
+
+            {% for post in posts %}
+
+            <div>
+                <h2> {{ post.title }} </h2>
+            
+                <p>Usuario: {{ post.user.name }}</p>
+                <form method="GET" action="{% url 'post' post.id %}">
+                    <button type="submit">Ver Publicacion</button>
+                </form>
+                <form method="POST" action="{% url 'delete_post' post.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Eliminar Publicacion</button>
+                </form>
+            </div>
+            
+            {% endfor %}
+        </div>
     </div>
-    
-    {% endfor %}
-
 
 {% endblock %}

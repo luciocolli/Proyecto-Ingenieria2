@@ -93,13 +93,25 @@ def editPublication(request, publication_id):
 def show_all_posts(request):
     if request.method == 'GET':
         logged_user = request.user
-        # Tomo las publicaciones de todos los usuarios menos del que se encuentra logueado
-        posts = Publication.objects.exclude(user=logged_user.id)
-        
-        if not posts:
-            message = 'No hay publicaciones disponibles'
+        categories = request.GET.getlist('category')
+
+        if categories:
+            # Filtrar publicaciones por categorías seleccionadas
+            posts = Publication.objects.filter(category__in=categories).exclude(user=logged_user.id) 
+            if not posts:
+                # Si no hay publicaciones para las categorías seleccionadas, mostrar mensaje
+                message = f'No hay publicaciones disponibles para la(s) categoría(s): {", ".join(categories)}'
+            else:
+                message = None
         else:
-            message = None
+            # Mostrar todas las publicaciones (excepto las del usuario)
+            posts = Publication.objects.exclude(user=logged_user.id)
+            if not posts:
+                # Si no hay publicaciones en el sistema, mostrar mensaje
+                message = 'No hay publicaciones disponibles'
+            else:
+                message = None
+
 
         return render(request, 'show-all-posts.html', {
             'nombre_usuario' : logged_user.name,
@@ -170,9 +182,28 @@ def show_my_post(request, id):  # Para ver una publicacion propia
 #@admin_required
 def admin_posts(request):   
     if request.method == 'GET':
-        posts = Publication.objects.all()
+        categories = request.GET.getlist('category')
+
+        if categories:
+            # Filtrar publicaciones por categorías seleccionadas
+            posts = Publication.objects.filter(category__in=categories) 
+            if not posts:
+                # Si no hay publicaciones para las categorías seleccionadas, mostrar mensaje
+                message = f'No hay publicaciones disponibles para la(s) categoría(s): {", ".join(categories)}'
+            else:
+                message = None
+        else:
+            # Mostrar todas las publicaciones (excepto las del usuario)
+            posts = Publication.objects.all()
+            if not posts:
+                # Si no hay publicaciones en el sistema, mostrar mensaje
+                message = 'No hay publicaciones disponibles'
+            else:
+                message = None
+
         return render(request, 'admin-show-posts.html', {
-            'posts': posts
+            'posts': posts,
+            'msg': message
         })
     else:
         posts = Publication.objects.all()

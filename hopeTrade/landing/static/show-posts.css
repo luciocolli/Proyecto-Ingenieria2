@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filters {
+    width: 30%;
+}
+
+.posts {
+    width: 65%;
+}
+
+.post {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.post h2 {
+    margin-top: 0;
+}

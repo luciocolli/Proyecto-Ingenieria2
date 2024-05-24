@@ -64,13 +64,7 @@ def login_view(request):
             dni = request.POST['dni']
             password = request.POST['password']
             user = back.authenticate(request, dni=dni, password=password)
-            # ACORDARME DE SACAR ESTO
-            #---------------------------------------------------------------------------------------
-            if back.enviarMail(user.mail, 'Sesión iniciada', f'Hola {user.name}, se detectó un inicio de sesión.'):
-                print('Mail se envio bien') 
-            else:
-                print("Mail sale mal")
-            #---------------------------------------------------------------------------------------
+    
             if user is not None:
                 login(request, user)
                 rol = user.rol
@@ -137,8 +131,14 @@ def view_asignar_colaborador(request):
         logged_user = request.user
         users = User.objects.exclude(id=logged_user.id)
 
+        if not users:
+            message = 'No hay usuarios registrados.'
+        else:
+            message = None
+
         return render(request, 'asignar_colaborador.html',{
-            'users': users
+            'users': users,
+            'msg': message
         })
 
 @login_required
