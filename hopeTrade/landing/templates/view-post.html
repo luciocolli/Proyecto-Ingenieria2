@@ -34,13 +34,13 @@
             </div>
             <img src="{% static file %}", width="350">
             <form method="GET" action='#'>
-                <button type="submit">Realizar comentario</button> <!-- url 'view-comments' post.id  -->
+                <button type="submit">Realizar comentario</button>
             </form>
             <form method="GET" action='#'>         
-                <button type="submit">Ver comentarios</button> <!-- Antes decia Ver Usuario -->
+                <button type="submit">Ver comentarios</button> 
             </form>
-            <form method="GET" action='#'>
-                <button type="submit">Realizar oferta</button> <!-- url 'make-offer' post.id -->
+            <form method="GET" action="{% url 'make_offer' post_id %}">
+                <button type="submit">Realizar oferta</button> 
             </form>
         </div>
     </div>

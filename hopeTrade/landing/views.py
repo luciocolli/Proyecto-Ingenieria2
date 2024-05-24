@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Publication, Offer
 from django.db import IntegrityError
 from users.models import User
-from .forms import CreateNewPublication, EditPublicationForm
+from .forms import CreateNewPublication, EditPublicationForm, CreateNewOffer
 from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
@@ -87,8 +87,6 @@ def editPublication(request, publication_id):
         'mensaje': mensaje
     })
 
-
-
 @login_required
 def show_all_posts(request):
     if request.method == 'GET':
@@ -147,7 +145,8 @@ def show_post(request, id):
             'state': post.state,
             'date': post.date,
             'user': post.user,
-            'file' : post.file
+            'file' : post.file,
+            'post_id': int(post.id)
         })
     
 
@@ -225,3 +224,30 @@ def delete_post(request, id):
         return render(request, 'admin-show-posts.html', {
             'posts': posts
         })
+    
+
+def offer_post(request, post_id):
+    if request.method == 'GET':
+        return render(request, 'createPublication.html', {
+            'form': CreateNewOffer()
+        })
+    else:
+        message = None
+        form = CreateNewOffer(request.POST)
+
+        if form.is_valid():
+            text = form.cleaned_data['description']
+            post = Publication.objects.get(id=post_id)
+
+            Offer.objects.create(
+                description = text,
+                user = request.user,
+                post = post
+            )
+
+            message = 'Oferta realizada con éxito'
+
+            #Enviar un mail al que recibe la oferta?
+    
+        return render(request, 'make_offer.html',{'form': form,
+                                               'message': message})

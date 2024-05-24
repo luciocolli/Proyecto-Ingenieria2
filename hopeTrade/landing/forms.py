@@ -13,7 +13,6 @@ class CreateNewPublication(forms.Form):
     title = forms.CharField(label='Titulo', max_length=200, widget=forms.TextInput())
     description = forms.CharField(label='Descripcion', max_length=500, widget=forms.TextInput())
     category = forms.ChoiceField(label='Categoria', choices=[('alimento', 'Alimento'), ('limpieza', 'Limpieza'), ('higiene', 'Higiene'), ('electrodomestico', 'Electrodomestico'), ('jueguete', 'Juguetes')], widget=forms.Select())
-    #category = forms.CharField(label='Categoria', max_length=100, widget=forms.TextInput())
     state = forms.ChoiceField(label='Estado del Producto', choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')], widget=forms.Select())
     date = forms.DateField(label='Fecha de Vencimiento', widget=forms.DateInput(attrs={'type': 'date'}), required=False)
     file = forms.ChoiceField(label= 'Nombre del archivo png', choices= get_png_files(), required=False)
@@ -28,4 +27,14 @@ class EditPublicationForm(forms.ModelForm):
             'state': forms.Select(choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')]),
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
-        
+
+
+class CreateNewOffer(forms.Form):
+    description = forms.CharField(
+        label='Descricpión de la oferta',
+        max_length=500,
+        widget=forms.Textarea(attrs={
+            'rows': 8,  # Número de filas
+            'cols': 60  # Número de columnas
+        })
+    )
