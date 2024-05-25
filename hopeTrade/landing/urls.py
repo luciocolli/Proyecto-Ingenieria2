@@ -13,4 +13,5 @@ urlpatterns = [
     path('admin-show-posts', views.admin_posts, name= 'admin-posts'),
     path('delete_post<int:id>', views.delete_post, name= 'delete_post'),
     path('make_offer/<int:post_id>', views.offer_post, name= 'make_offer'),
+    path('delete_publication/<int:id>/', views.user_delete_post, name='user_delete_post')
 ]

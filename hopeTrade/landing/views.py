@@ -92,31 +92,39 @@ def show_all_posts(request):
     if request.method == 'GET':
         logged_user = request.user
         categories = request.GET.getlist('category')
+        search = request.GET.get('search', '')
+
+        # Empezar con todas las publicaciones que no sean del usuario actual
+        posts = Publication.objects.exclude(user=logged_user)
 
         if categories:
             # Filtrar publicaciones por categorías seleccionadas
-            posts = Publication.objects.filter(category__in=categories).exclude(user=logged_user.id) 
-            if not posts:
-                # Si no hay publicaciones para las categorías seleccionadas, mostrar mensaje
-                message = f'No hay publicaciones disponibles para la(s) categoría(s): {", ".join(categories)}'
-            else:
-                message = None
-        else:
-            # Mostrar todas las publicaciones (excepto las del usuario)
-            posts = Publication.objects.exclude(user=logged_user.id)
-            if not posts:
-                # Si no hay publicaciones en el sistema, mostrar mensaje
-                message = 'No hay publicaciones disponibles'
-            else:
-                message = None
+            posts = posts.filter(category__in=categories)
 
+        if search:
+            # Filtrar publicaciones por título
+            search_words = search.split()
+            for word in search_words:
+                posts = posts.filter(title__icontains=word)
+
+        # Mensaje de resultados
+        if not posts:
+            if categories and search:
+                message = f'No hay publicaciones disponibles para la(s) categoría(s) "{", ".join(categories)}" con el título "{search}"'
+            elif categories:
+                message = f'No hay publicaciones disponibles para la(s) categoría(s): {", ".join(categories)}'
+            elif search:
+                message = f'No hay publicaciones disponibles con el título "{search}"'
+            else:
+                message = 'No hay publicaciones disponibles'
+        else:
+            message = None
 
         return render(request, 'show-all-posts.html', {
-            'nombre_usuario' : logged_user.name,
+            'nombre_usuario': logged_user.name,
             'posts': posts,
             'msg': message
         })
-
 
 @login_required
 def show_my_profile(request):
@@ -148,7 +156,6 @@ def show_post(request, id):
             'file' : post.file,
             'post_id': int(post.id)
         })
-    
 
 def show_my_posts(request): # Para ver listado de mis publicaciones
     if request.method == 'GET':
@@ -215,16 +222,28 @@ def admin_posts(request):
 def delete_post(request, id):
     if request.method == 'POST':
         publicacion = get_object_or_404(Publication, id=id)
-        if back.enviarMail(publicacion.user.mail,'Publicación eliminada', f'Hola {publicacion.user.name}, tu publicación {publicacion.title} a sido eliminada porque era indebida'):
-            print('Mail salio bien') #Eliminar los print cdo funcione todo
-        else:
-            print  ('Mail salio mal')
+        back.enviarMail(publicacion.user.mail,'Publicación eliminada', f'Hola {publicacion.user.name}, tu publicación {publicacion.title} a sido eliminada porque era indebida')
         publicacion.delete()
         posts = Publication.objects.all()
         return render(request, 'admin-show-posts.html', {
             'posts': posts
         })
     
+def user_delete_post(request, id):
+    if request.method == 'GET':  # Cambio a GET
+        message = None
+        myPosts = Publication.objects.filter(user=request.user)
+        publicacion = get_object_or_404(Publication, id=id)
+        if not Offer.objects.filter(post_id=publicacion.id).exists():
+            #publicacion.delete()
+            message = 'Publicacion eliminada'
+        else:
+            message = 'La publicacion no puede eliminarse porque tiene ofertas pendientes'
+
+        return render(request, 'my-posts.html', {
+            'myPosts' : myPosts,
+            'msg': message
+        })
 
 def offer_post(request, post_id):
     if request.method == 'GET':
