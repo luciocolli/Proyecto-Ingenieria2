@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Mis Ofertas</h1>
+
+    {% if msg %}
+    <div class="alert alert-info">
+        {{ msg }}
+    </div>
+    {% endif %}
+
+    {% for offer in myOffers %}
+        <div>
+            <h2>{{ offer.user.name }} {{ offer.user.surname }}</h2>
+            <p>{{ offer.description }}</p>
+            
+            <form method="POST" action="{% url 'accept_offer' offer.id %}">
+                {% csrf_token %}
+                <button type="submit">Aceptar oferta</button>
+            </form>
+
+            <form method="POST" action="{% url 'decline_offer' offer.id %}">
+                {% csrf_token %}
+                <button type="submit">Rechazar oferta</button>
+            </form>
+
+            <form method="POST" action="{% url 'cancel_offer' offer.id %}">
+                {% csrf_token %}
+                <button type="submit">Cancelar oferta</button>
+            </form>
+        </div>
+    {% endfor %}
+{% endblock %}
+

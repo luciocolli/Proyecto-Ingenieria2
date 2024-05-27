@@ -230,7 +230,7 @@ def delete_post(request, id):
         })
     
 def user_delete_post(request, id):
-    if request.method == 'GET':  # Cambio a GET
+    if request.method == 'POST': 
         message = None
         myPosts = Publication.objects.filter(user=request.user)
         publicacion = get_object_or_404(Publication, id=id)
@@ -270,3 +270,51 @@ def offer_post(request, post_id):
     
         return render(request, 'make_offer.html',{'form': form,
                                                'message': message})
+    
+def show_my_offers(request):
+    if request.method == 'GET':
+        message = None
+
+        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        #offer.delete()
+        return render(request, 'view-my-offers.html',{
+            'myOffers' : offers,
+            'msg': message
+        })
+
+def decline_offer(request,id):
+    if request.method == 'POST':
+        message = 'Oferta rechazada'
+        offer = get_object_or_404(Offer, id=id)
+        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        offer.delete()
+
+        return render(request, 'view-my-offers.html',{
+            'myOffers' : offers,
+            'msg': message
+        })
+    
+def accept_offer(request,id):
+    if request.method == 'POST':
+        message = 'Oferta aceptada'
+        offer = get_object_or_404(Offer, id=id)
+        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        #offer.delete()
+
+        return render(request, 'view-my-offers.html',{
+            'myOffers' : offers,
+            'msg': message
+        })
+    
+def cancel_offer(request,id):
+    if request.method == 'POST':
+        message = 'Oferta cancelada'
+        offer = get_object_or_404(Offer, id=id)
+        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        back.enviarMail(offer.user.mail,'Oferta cancelada', f'Hola {offer.user.name}, el usuario de la publicación a cancelado la oferta')
+        offer.delete()
+
+        return render(request, 'view-my-offers.html',{
+            'myOffers' : offers,
+            'msg': message
+        })

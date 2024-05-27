@@ -20,16 +20,18 @@
                 <button type="submit">Ver Mi Publicacion</button>
             </form>
 
-            <form method="GET" action="{% url 'user_delete_post' post.id %}">
-                <button type="submit">Eliminar Publicación</button>
+            <form method="POST" action="{% url 'user_delete_post' post.id %}">
+                {% csrf_token %}
+                <button type="submit">Eliminar Publicacion</button>
             </form>
 
             <form method="GET" action="{% url 'edit-publication' post.id %}">
                 <button type="submit">Editar Mi Publicación</button>
             </form>
-            <form method="GET" action="#">
+            <form method="GET" action="{% url 'show_my_offers' %}">
                 <button type="submit">Ver Ofertas</button>
             </form>
+            
         </div>
 
     {% endfor %}
