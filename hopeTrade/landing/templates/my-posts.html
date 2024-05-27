@@ -29,6 +29,7 @@
                 <button type="submit">Editar Mi Publicación</button>
             </form>
             <form method="GET" action="{% url 'show_my_offers' %}">
+                <input type="hidden" name="title" value="{{ post.title }}">
                 <button type="submit">Ver Ofertas</button>
             </form>
             

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% csrf_token %}
+    <h1> Mis ofertas</h1>
+    {% if msg %}
+        <div class="alert alert-{{ message.tags }}">
+        {{ msg }}
+    {% endif %}
+
+    {% for offer in myOffers %}
+        <h2> <h2>{{ offer.post.title }}</h2></h2>
+        <form method="POST" action="{% url 'cancel_offer' offer.id %}">
+            {% csrf_token %}
+            <button type="submit">Cancelar oferta</button>
+        </form>
+    {% endfor %}
+        
+{% endblock %}

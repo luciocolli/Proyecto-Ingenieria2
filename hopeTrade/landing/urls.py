@@ -15,6 +15,7 @@ urlpatterns = [
     path('make_offer/<int:post_id>', views.offer_post, name= 'make_offer'),
     path('delete_publication<int:id>', views.user_delete_post, name='user_delete_post'),
     path('my-offers/', views.show_my_offers, name='show_my_offers'),
+    path('offers/',views.show_offers, name = 'offers'),
     path('decline-offer<int:id>', views.decline_offer, name='decline_offer'),
     path('accept-offer<int:id>', views.accept_offer, name='accept_offer'),
     path('cancel-offer<int:id>', views.cancel_offer, name='cancel_offer'),

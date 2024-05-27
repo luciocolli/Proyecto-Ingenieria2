@@ -3,7 +3,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Mis Ofertas</h1>
+    <h1>Ofertas de {{ title }} </h1>
 
     {% if msg %}
     <div class="alert alert-info">
@@ -24,11 +24,6 @@
             <form method="POST" action="{% url 'decline_offer' offer.id %}">
                 {% csrf_token %}
                 <button type="submit">Rechazar oferta</button>
-            </form>
-
-            <form method="POST" action="{% url 'cancel_offer' offer.id %}">
-                {% csrf_token %}
-                <button type="submit">Cancelar oferta</button>
             </form>
         </div>
     {% endfor %}

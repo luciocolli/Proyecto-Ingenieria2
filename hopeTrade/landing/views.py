@@ -271,16 +271,35 @@ def offer_post(request, post_id):
         return render(request, 'make_offer.html',{'form': form,
                                                'message': message})
     
+
+#Ofertas hechas a mi publicacion
 def show_my_offers(request):
     if request.method == 'GET':
         message = None
-
+        title = request.GET.get('title')
         offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
-        #offer.delete()
+        if not offers:
+            message = 'No hay ofertas para esta publicación'
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
-            'msg': message
+            'title' :title,
+            'msg' : message
         })
+
+#Ofertas propias realizadas
+def show_offers(request):
+    if request.method == 'GET':
+        message = None
+        offers = Offer.objects.filter(user=request.user)
+
+        if not offers:
+            message = 'No realizaste ofertas'
+
+        return render(request, 'offers.html',{
+            'myOffers' : offers,
+            'msg' : message
+        })
+
 
 def decline_offer(request,id):
     if request.method == 'POST':
@@ -310,11 +329,11 @@ def cancel_offer(request,id):
     if request.method == 'POST':
         message = 'Oferta cancelada'
         offer = get_object_or_404(Offer, id=id)
-        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
-        back.enviarMail(offer.user.mail,'Oferta cancelada', f'Hola {offer.user.name}, el usuario de la publicación a cancelado la oferta')
+        offers = Offer.objects.filter(user=request.user)
+        back.enviarMail(offer.post.user.mail,'Oferta cancelada', f'Hola {offer.post.user.name}, el usuario {offer.user.name} {offer.user.surname} a cancelado la oferta')
         offer.delete()
 
-        return render(request, 'view-my-offers.html',{
+        return render(request, 'offers.html',{
             'myOffers' : offers,
             'msg': message
         })
