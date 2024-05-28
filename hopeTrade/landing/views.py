@@ -267,26 +267,28 @@ def user_delete_post(request, id):
 
 def offer_post(request, post_id):
     if request.method == 'GET':
-        return render(request, 'createPublication.html', {
+        return render(request, 'make_offer.html', {
             'form': CreateNewOffer()
         })
     else:
-        message = None
         form = CreateNewOffer(request.POST)
 
         if form.is_valid():
-            text = form.cleaned_data['description']
-            post = Publication.objects.get(id=post_id)
+            post = get_object_or_404(Publication, id=post_id)
 
+            # Crear la oferta usando los datos validados del formulario
             Offer.objects.create(
-                description = text,
-                user = request.user,
-                post = post
+                title=form.cleaned_data['title'],
+                date=form.cleaned_data['date'],
+                hour=form.cleaned_data['hour'],
+                sede=form.cleaned_data['sede'],
+                description=form.cleaned_data['description'],
+                user=request.user,
+                post=post
             )
-
             message = 'Oferta realizada con éxito'
-
-            #Enviar un mail al que recibe la oferta?
+        else:
+            message = None
     
         return render(request, 'make_offer.html',{'form': form,
                                                'message': message})

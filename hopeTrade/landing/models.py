@@ -13,6 +13,10 @@ class Publication(models.Model):
     file = models.CharField(max_length=100, default= 'Sin_foto.png', blank=True)
 
 class Offer(models.Model):
+    title = models.TextField(max_length = 100, null=True)
     description = models.TextField(max_length=500)
+    date = models.DateField(null=True, blank = True)
+    hour = models.TimeField(null= True, blank= True)
+    sede = models.CharField(max_length=200, default='LA PLATA')
     user = models.ForeignKey(User, on_delete= models.DO_NOTHING)
     post = models.ForeignKey(Publication, on_delete= models.DO_NOTHING)

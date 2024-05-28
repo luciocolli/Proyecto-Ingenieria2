@@ -2,7 +2,8 @@ from django import forms
 from .models import Publication
 from hopeTrade.settings import STATIC_URL, BASE_DIR
 import os
-
+from datetime import datetime, time
+from django.core.exceptions import ValidationError
 
 def get_png_files():
     static_dir = os.path.join(BASE_DIR, "landing",STATIC_URL)
@@ -30,11 +31,34 @@ class EditPublicationForm(forms.ModelForm):
 
 
 class CreateNewOffer(forms.Form):
+    title = forms.CharField(label='Titulo', max_length=200, widget=forms.TextInput())
+    date = forms.DateField(label='Fecha de Encuentro', widget=forms.DateInput(attrs={'type': 'date'}), required=True)
+    hour = forms.TimeField(label='Hora', widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
+    sede = forms.ChoiceField(label='Sede', choices=[
+        ('LA PLATA', 'La Plata'),
+        ('BURZACO', 'Burzaco'),
+        ('MORON', 'Moron'),
+        ('VILLA ELISA', 'Villa Elisa'),
+        ('LAS FLORES', 'Las Flores'),
+        ('MERLO', 'Merlo')
+    ], widget=forms.Select())
     description = forms.CharField(
-        label='Descricpión de la oferta',
+        label='Descripción de la oferta',
         max_length=500,
-        widget=forms.Textarea(attrs={
-            'rows': 8,  # Número de filas
-            'cols': 60  # Número de columnas
-        })
+        widget=forms.Textarea(attrs={'rows': 8, 'cols': 60})
     )
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        if date.weekday() >= 5:  # 5 y 6 son sábado y domingo
+            raise ValidationError("La fecha debe ser un día entre lunes y viernes.")
+        if date < datetime.now().date():
+            raise ValidationError("La fecha no puede ser una fecha pasada.")
+        return date
+
+    def clean_hour(self):
+        hour = self.cleaned_data['hour']
+        if not (time(8, 0) <= hour <= time(20, 0)):
+            raise ValidationError("La hora debe estar entre las 8am y las 8pm.")
+        return hour
+
