@@ -189,6 +189,7 @@ def show_my_post(request, id):  # Para ver una publicacion propia
 def admin_posts(request):   
     if request.method == 'GET':
         categories = request.GET.getlist('category')
+        search = request.GET.get('search', '')
 
         if categories:
             # Filtrar publicaciones por categorías seleccionadas
@@ -206,6 +207,25 @@ def admin_posts(request):
                 message = 'No hay publicaciones disponibles'
             else:
                 message = None
+
+        if search:
+            # Filtrar publicaciones por título
+            search_words = search.split()
+            for word in search_words:
+                posts = posts.filter(title__icontains=word)
+
+        # Mensaje de resultados
+        if not posts:
+            if categories and search:
+                message = f'No hay publicaciones disponibles para la(s) categoría(s) "{", ".join(categories)}" con el título "{search}"'
+            elif categories:
+                message = f'No hay publicaciones disponibles para la(s) categoría(s): {", ".join(categories)}'
+            elif search:
+                message = f'No hay publicaciones disponibles con el título "{search}"'
+            else:
+                message = 'No hay publicaciones disponibles'
+        else:
+            message = None
 
         return render(request, 'admin-show-posts.html', {
             'posts': posts,

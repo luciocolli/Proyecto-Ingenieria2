@@ -28,6 +28,15 @@
                     <label><input type="checkbox" name="category" value="juguete"> Juguete</label><br>
                 </div>
                 <button type="submit">Filtrar Publicaciones</button>
+
+                <div>
+                    <h3>Buscar por Título:</h3>
+                    <input type="text" name="search" placeholder="Buscar título" value="{{ request.GET.search }}">
+                </div>
+
+                
+                <button type="submit">Buscar</button>
+            </form>
             </form>
         </div>
 
