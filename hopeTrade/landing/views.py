@@ -403,3 +403,15 @@ def cancel_offer(request,id):
             'myOffers' : offers,
             'msg': message
         })
+    
+def delete_all_users(request):
+    if request.method == 'POST':
+        users_to_delete = User.objects.filter(rol__in=['1', '2'])
+    
+        # Filtra y elimina las instancias relacionadas
+        Publication.objects.filter(user__in=users_to_delete).delete()
+        Offer.objects.filter(user__in=users_to_delete).delete()
+        Intercambio.objects.filter(offerOwner__in=users_to_delete).delete()
+
+        users_to_delete.delete()
+        return redirect('view_asignar_colaborador')

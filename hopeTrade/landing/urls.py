@@ -19,4 +19,5 @@ urlpatterns = [
     path('decline-offer<int:id>', views.decline_offer, name='decline_offer'),
     path('accept-offer<int:id>', views.accept_offer, name='accept_offer'),
     path('cancel-offer<int:id>', views.cancel_offer, name='cancel_offer'),
+    path('delete-users/', views.delete_all_users, name='delete-users'),
 ]
