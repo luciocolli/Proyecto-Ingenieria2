@@ -355,6 +355,8 @@ def decline_offer(request,id):
         offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
         offer.delete()
 
+        back.enviarMail(offer.user.mail,'Oferta rechazada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} a rechazado la oferta {offer.title}')
+
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
             'msg': message
@@ -384,6 +386,9 @@ def accept_offer(request,id):
             post_offer.isHide = True
             post_offer.save()  # Guarda los cambios en la base de datos
 
+            # enviar mail al ofertador de oferta aceptada
+            back.enviarMail(offer.user.mail,'Oferta aceptada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} a aceptado la oferta {offer.title}')
+
             message = 'Oferta aceptada con éxito.'
 
         return render(request, 'view-my-offers.html',{
@@ -396,7 +401,7 @@ def cancel_offer(request,id):
         message = 'Oferta cancelada'
         offer = get_object_or_404(Offer, id=id)
         offers = Offer.objects.filter(user=request.user)
-        back.enviarMail(offer.post.user.mail,'Oferta cancelada', f'Hola {offer.post.user.name}, el usuario {offer.user.name} {offer.user.surname} a cancelado la oferta')
+        back.enviarMail(offer.post.user.mail,'Oferta cancelada', f'Hola {offer.post.user.name}, el usuario {offer.user.name} {offer.user.surname} a cancelado la oferta {offer.title}')
         offer.delete()
 
         return render(request, 'offers.html',{
