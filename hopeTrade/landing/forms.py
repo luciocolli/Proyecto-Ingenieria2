@@ -2,7 +2,7 @@ from django import forms
 from .models import Publication
 from hopeTrade.settings import STATIC_URL, BASE_DIR
 import os
-from datetime import datetime, time
+from datetime import date, datetime, time
 from django.core.exceptions import ValidationError
 
 def get_png_files():
@@ -13,11 +13,48 @@ def get_png_files():
 class CreateNewPublication(forms.Form):
     title = forms.CharField(label='Titulo', max_length=200, widget=forms.TextInput())
     description = forms.CharField(label='Descripcion', max_length=500, widget=forms.TextInput())
-    category = forms.ChoiceField(label='Categoria', choices=[('alimento', 'Alimento'), ('limpieza', 'Limpieza'), ('higiene', 'Higiene'), ('electrodomestico', 'Electrodomestico'), ('jueguete', 'Juguetes')], widget=forms.Select())
-    state = forms.ChoiceField(label='Estado del Producto', choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')], widget=forms.Select())
-    date = forms.DateField(label='Fecha de Vencimiento', widget=forms.DateInput(attrs={'type': 'date'}), required=False)
-    file = forms.ChoiceField(label= 'Nombre del archivo png', choices= get_png_files(), required=False)
+    category = forms.ChoiceField(
+        label='Categoria',
+        choices=[
+            ('alimento', 'Alimento'),
+            ('limpieza', 'Limpieza'),
+            ('higiene', 'Higiene'),
+            ('electrodomestico', 'Electrodomestico'),
+            ('jueguete', 'Juguetes')
+        ],
+        widget=forms.Select()
+    )
+    state = forms.ChoiceField(
+        label='Estado del Producto',
+        choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')],
+        widget=forms.Select()
+    )
+    date = forms.DateField(
+        label='Fecha de Vencimiento',
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        required=False
+    )
+    file = forms.ChoiceField(
+        label='Nombre del archivo png',
+        choices=get_png_files(),
+        required=False
+    )
 
+    def clean(self):
+        cleaned_data = super().clean()
+        category = cleaned_data.get("category")
+        expiration_date = cleaned_data.get("date")
+
+        if category == 'alimento':
+            if not expiration_date:
+                raise ValidationError("La fecha de vencimiento es obligatoria para la categoría 'Alimento'.")
+            if expiration_date < date.today():
+                raise ValidationError("La fecha de vencimiento no puede ser una fecha pasada.")
+        else:
+            cleaned_data['date'] = None  # Remove the date if the category is not 'Alimento'
+
+        return cleaned_data
+    
     
 class EditPublicationForm(forms.ModelForm):
     class Meta:
@@ -26,7 +63,7 @@ class EditPublicationForm(forms.ModelForm):
         widgets = {
             'category': forms.Select(choices=[('alimento', 'Alimento'), ('limpieza', 'Limpieza'), ('higiene', 'Higiene'), ('electrodomestico', 'Electrodomestico'), ('jueguete', 'Juguetes')]),
             'state': forms.Select(choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')]),
-            'date': forms.DateInput(attrs={'type': 'date'}),
+            'date': forms.DateInput(attrs={'type': 'date'})
         }
 
 

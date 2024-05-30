@@ -11,6 +11,8 @@ class Publication(models.Model):
     date = models.DateField(null=True, blank= True)  # Vencimiento
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     file = models.CharField(max_length=100, default= 'Sin_foto.png', blank=True)
+    isHide = models.BooleanField(default = False)
+    
 
 class Offer(models.Model):
     title = models.TextField(max_length = 100, null=True)
@@ -19,4 +21,10 @@ class Offer(models.Model):
     hour = models.TimeField(null= True, blank= True)
     sede = models.CharField(max_length=200, default='LA PLATA')
     user = models.ForeignKey(User, on_delete= models.DO_NOTHING)
-    post = models.ForeignKey(Publication, on_delete= models.DO_NOTHING)
+    post = models.ForeignKey(Publication, on_delete= models.CASCADE)
+
+class Intercambio(models.Model):
+    post = models.ForeignKey(Publication, on_delete= models.CASCADE) # de aca sacamos el dueño
+    offerOwner = models.ForeignKey(User, on_delete= models.DO_NOTHING)
+    date = models.DateField(null=True, blank = True)
+    isDone = models.BooleanField(default = False)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Publication, Offer
+from .models import Publication, Offer, Intercambio
 from django.db import IntegrityError
 from users.models import User
 from .forms import CreateNewPublication, EditPublicationForm, CreateNewOffer
@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
 from users import backend as back
+from datetime import date
 # Create your views here.
 
 
@@ -60,11 +61,19 @@ def createPublication(request):
 @login_required
 def editPublication(request, publication_id):
 
+    publication = get_object_or_404(Publication, id=publication_id)
+    mensaje = None
+
     def hasOffers(user):
         return Offer.objects.exists(user)
     
-    publication = get_object_or_404(Publication, id=publication_id)
-    mensaje = None
+    def title_exists(new_title):
+        return Publication.objects.filter(user = publication.user, title = new_title).exclude(id=publication.id).exists()
+
+    def guardar_form():
+        form.save()
+        return 'Se han guardado los cambios correctamente'
+
     
     # Verifica si el usuario logueado es el creador de la publicación
     if publication.user != request.user and not hasOffers(publication.user):
@@ -73,13 +82,21 @@ def editPublication(request, publication_id):
     if request.method == 'POST':
         form = EditPublicationForm(request.POST, instance=publication)
         if form.is_valid():
-            new_title = form.cleaned_data['title'] 
-            encontre = Publication.objects.filter(user = publication.user, title = new_title).exclude(id=publication.id).exists()
-            if not encontre:
-                form.save()
-                mensaje = "Se han guardado los cambios."
+            if not title_exists(form.cleaned_data['title']):
+                mensaje =  'Se han guardado los cambios correctamente'
+
+                if form.cleaned_data['category'] != 'alimento':
+                    publication.date = None
+                    mensaje = guardar_form()
+                elif form.cleaned_data['date'] == None:
+                    mensaje = 'Debes ingresar una fecha de vencimiento'
+                elif form.cleaned_data['date'] < date.today():
+                    mensaje = 'No puedes ingresar productos vencidos'
+                else:
+                    guardar_form()
+                
             else:
-                mensaje = "Ya posees una publicacion con este titulo"
+                mensaje = "Ya posees una publicación con este título"
     else:
         form = EditPublicationForm(instance=publication)
     return render(request, 'editPublication.html', {
@@ -95,7 +112,7 @@ def show_all_posts(request):
         search = request.GET.get('search', '')
 
         # Empezar con todas las publicaciones que no sean del usuario actual
-        posts = Publication.objects.exclude(user=logged_user)
+        posts = Publication.objects.exclude(user=logged_user).filter(isHide = False)
 
         if categories:
             # Filtrar publicaciones por categorías seleccionadas
@@ -242,7 +259,15 @@ def admin_posts(request):
 def delete_post(request, id):
     if request.method == 'POST':
         publicacion = get_object_or_404(Publication, id=id)
-        back.enviarMail(publicacion.user.mail,'Publicación eliminada', f'Hola {publicacion.user.name}, tu publicación {publicacion.title} a sido eliminada porque era indebida')
+        back.enviarMail(publicacion.user.mail,'Publicación eliminada', f'Hola {publicacion.user.name}, tu publicación {publicacion.title} ha sido eliminada porque era indebida.')
+        
+        # si la publicacion esta escondida es por que tiene una oferta aceptada pero no el intercambio confirmado
+        # le avisamos al ofertador que se elimino la publicacion para que no vaya la centro de caritas
+        if publicacion.isHide:
+            intercambio = Intercambio.objects.get(post = publicacion)
+            ofertador = intercambio.offerOwner
+            back.enviarMail(ofertador.mail,'Publicación eliminada', f'Hola {ofertador.name}, la publicación {publicacion.title} en la que realizaste una oferta ha sido eliminada porque era indebida.')
+        
         publicacion.delete()
         posts = Publication.objects.all()
         return render(request, 'admin-show-posts.html', {
@@ -255,7 +280,7 @@ def user_delete_post(request, id):
         myPosts = Publication.objects.filter(user=request.user)
         publicacion = get_object_or_404(Publication, id=id)
         if not Offer.objects.filter(post_id=publicacion.id).exists():
-            #publicacion.delete()
+            publicacion.delete()
             message = 'Publicacion eliminada'
         else:
             message = 'La publicacion no puede eliminarse porque tiene ofertas pendientes'
@@ -295,10 +320,10 @@ def offer_post(request, post_id):
     
 
 #Ofertas hechas a mi publicacion
-def show_my_offers(request):
+def show_my_offers(request, id):
     if request.method == 'GET':
         message = None
-        title = request.GET.get('title')
+        title = Publication.objects.get(id=id).title
         offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
         if not offers:
             message = 'No hay ofertas para esta publicación'
@@ -337,10 +362,29 @@ def decline_offer(request,id):
     
 def accept_offer(request,id):
     if request.method == 'POST':
-        message = 'Oferta aceptada'
+        message = None
         offer = get_object_or_404(Offer, id=id)
         offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
         #offer.delete()
+        
+        # chequear que esa publicacion no este en un intercambio creado
+        post_offer = Publication.objects.get(id = offer.post_id)
+        try:
+            post_intercambio = Intercambio.objects.get(post=post_offer)
+            # Si se encuentra un intercambio, no se puede aceptar otra oferta
+            message = 'No puedes aceptar más de una oferta con un intercambio en curso.'
+        except Intercambio.DoesNotExist:
+            # Crear intercambio
+            Intercambio.objects.create(
+                date=offer.date,
+                offerOwner=offer.user,
+                post=post_offer
+            )
+
+            post_offer.isHide = True
+            post_offer.save()  # Guarda los cambios en la base de datos
+
+            message = 'Oferta aceptada con éxito.'
 
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
