@@ -39,4 +39,9 @@
         </tbody>
     </table>
 
+    <form action="{% url 'delete-users' %}" method="POST">
+        {% csrf_token %}
+        <button>Eliminar Usuarios</button>
+    </form>
+
 {% endblock %}
