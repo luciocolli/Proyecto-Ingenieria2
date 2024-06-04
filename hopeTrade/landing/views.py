@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Publication, Offer, Intercambio
+from .models import Publication, Offer, CashDonation, Coment, Intercambio
 from django.db import IntegrityError
 from users.models import User
-from .forms import CreateNewPublication, EditPublicationForm, CreateNewOffer
+from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer
 from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
+from django.utils import timezone
+from django.db.models import Sum
 from users import backend as back
 from datetime import date
 # Create your views here.
@@ -162,7 +164,6 @@ def show_my_profile(request):
 def show_post(request, id):
     if request.method == 'GET':
         post = get_object_or_404(Publication, id=id)
-        print(post.file)
         return render(request, 'view-post.html', {
             'title': post.title,
             'description': post.description,
@@ -171,6 +172,8 @@ def show_post(request, id):
             'date': post.date,
             'user': post.user,
             'file' : post.file,
+            'id' : post.id,
+            'form' : ComentPublicationForm(),
             'post_id': int(post.id)
         })
 
@@ -199,7 +202,8 @@ def show_my_post(request, id):  # Para ver una publicacion propia
             'category': post.category,
             'state': post.state,
             'date': post.date,
-            'file': post.file
+            'file': post.file,
+            'id' : post.id
         })
     
 #@admin_required
@@ -273,6 +277,86 @@ def delete_post(request, id):
         return render(request, 'admin-show-posts.html', {
             'posts': posts
         })
+
+@login_required
+def donation(request):
+    donations = CashDonation.objects.all()
+    total_donations = CashDonation.objects.aggregate(total= Sum('cash'))['total']
+    return render(request, 'donation.html',{
+        'donations' : donations,
+        'total_donations' : total_donations
+    })
+
+@login_required
+def cashRegister(request):
+    if request.method == 'GET':
+        return render(request, 'cashRegister.html', {
+            'form': cashRegisterForm()
+        })
+    else:
+        form = cashRegisterForm(request.POST)
+        if form.is_valid() :
+            CashDonation.objects.create(
+                cash = request.POST['cash'],
+                date = timezone.now(),
+                name = request.POST['name'],
+                surname = request.POST['surname'],
+                dniDonor = request.POST['dniDonor']
+            )
+            return redirect('donation')
+
+@login_required
+def makeComent(request):
+        form = ComentPublicationForm(request.POST)
+        if form.is_valid() :
+            publication_id = request.POST.get('id')
+            logged_user = request.user
+            publication = get_object_or_404(Publication, id=publication_id)
+            comentText = request.POST['text']
+
+            if len(comentText) > 254 :
+                messages.error(request, 'El comentario deber tener menos de 255 caracteres')
+                return redirect('post', publication_id)
+            Coment.objects.create(
+                parent_id = None,
+                author = logged_user,
+                publication = publication,
+                text = request.POST['text']
+            )
+        return redirect('post', publication_id)
+
+@login_required
+def viewComents(request):
+    if request.method == 'GET':    
+        publication_id = request.GET.get('id')
+        publicacion = Publication.objects.get( id=publication_id )
+        coments = Coment.objects.filter(publication = publication_id)
+        return render(request, 'coments.html',{
+            'coments' : coments,
+            'publication' : publicacion,
+            'form' : ComentPublicationForm()
+         })
+
+@login_required
+def makeResponse(request, id):
+
+    logged_user = request.user
+    coment = get_object_or_404(Coment, id=id)
+    publication = coment.publication
+    publication_id = publication.id
+    coments = Coment.objects.filter(publication = publication_id)
+
+    Coment.objects.create(
+        parent_id = coment,
+        author = logged_user,
+        publication = publication,
+        text = request.POST['text']
+    )
+    return render(request, 'coments.html',{
+            'coments' : coments,
+            'publication' : publication,
+            'form' : ComentPublicationForm()
+         })
     
 def user_delete_post(request, id):
     if request.method == 'POST': 

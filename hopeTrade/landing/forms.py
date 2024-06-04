@@ -98,4 +98,13 @@ class CreateNewOffer(forms.Form):
         if not (time(8, 0) <= hour <= time(20, 0)):
             raise ValidationError("La hora debe estar entre las 8am y las 8pm.")
         return hour
+        
+class cashRegisterForm(forms.Form):
+    cash = forms.CharField(label = 'Importe', widget=forms.TextInput())
+    name = forms.CharField(label = 'Nombre del donante', widget=forms.TextInput())
+    surname = forms.CharField(label = 'Apellido del donante', widget=forms.TextInput())
+    dniDonor = forms.CharField(label = 'DNI del donante', widget=forms.TextInput())
 
+class ComentPublicationForm(forms.Form):
+    text = forms.CharField(label = 'Texto', widget=forms.TextInput(), max_length=255)
+        

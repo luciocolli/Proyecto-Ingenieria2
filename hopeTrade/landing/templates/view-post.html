@@ -5,7 +5,11 @@
 {% load static %}
 
 {% block content %}
+
+
+    
 {% csrf_token %}
+
     <h2> {{ title }}</h2>
     <h3> {{ user.name }} </h3> 
     <form method="GET" action="{% url 'profile' user.id %}">
@@ -33,11 +37,25 @@
                 {% endif %}
             </div>
             <img src="{% static file %}", width="350">
-            <form method="GET" action='#'>
-                <button type="submit">Realizar comentario</button>
+            
+            <form method="POST" action="{% url 'make_coment' %}">
+                {% if messages %}
+                    <div class="messages">
+                        <ul>
+                        {% for message in messages %}
+                             <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% csrf_token %}
+                {{ form }}
+                <input type="hidden" name="id" value="{{ id }}">
+                <button type="submit">Realizar comentario</button> 
             </form>
-            <form method="GET" action='#'>         
-                <button type="submit">Ver comentarios</button> 
+            <form method="GET" action="{% url 'view_coments' %}">
+                <input type="hidden" name="id" value="{{ id }}">
+                <button type="submit">Ver comentarios</button>
             </form>
             <form method="GET" action="{% url 'make_offer' post_id %}">
                 <button type="submit">Realizar oferta</button> 

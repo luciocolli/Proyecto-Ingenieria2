@@ -28,3 +28,18 @@ class Intercambio(models.Model):
     offerOwner = models.ForeignKey(User, on_delete= models.DO_NOTHING)
     date = models.DateField(null=True, blank = True)
     isDone = models.BooleanField(default = False)
+
+class CashDonation(models.Model):
+    cash = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    name = models.CharField(max_length = 100, default='Sin Nombre')
+    surname = models.CharField(max_length = 100, default='Sin apellido')
+    dniDonor = models.CharField(max_length = 100)
+
+class Coment(models.Model):
+    parent_id = models.ForeignKey('self', on_delete = models.CASCADE, null = True, related_name='responses')
+    author = models.ForeignKey(User, on_delete= models.CASCADE)
+    publication = models.ForeignKey(Publication, on_delete =  models.CASCADE)
+    text = models.CharField(max_length = 255)
+
+    

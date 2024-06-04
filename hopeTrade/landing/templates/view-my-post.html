@@ -30,6 +30,10 @@
             <div>
                 <img src="{% static file  %}", width="350">
             </div>
+            <form method="GET" action="{% url 'view_coments' %}">
+                <input type="hidden" name="id" value="{{ id }}">
+                <button type="submit">Ver comentarios</button>
+            </form>
         </div>
     </div>
     
