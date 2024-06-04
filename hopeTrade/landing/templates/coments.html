@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+{% if coments %}
+
+<style>
+    .respuesta {
+    margin-left: 30px;
+}
+</style>
+    <h2>Comentarios de la publicacion: {{ publication.title }} </h2>
+
+
+    {% for coment in coments %}
+    {% if coment.parent_id == null %}
+
+        <p> {{ coment.author.name }} dice : {{ coment.text }} </p> 
+        {% for response in coment.responses.all %}
+                <p id="respuesta" class="respuesta"> {{ response.author.name }} Responde : {{ response.text }} </p>
+        {% endfor %}
+
+        {% if request.user == publication.user %}
+            <form method="POST" action="{% url 'make_response' coment.id %}">
+                {% csrf_token %}
+                {{ form }}
+             <button type="submit">Responder Comentario</button>
+            </form>
+        {% endif %}
+    {% endif %}
+    {% endfor %}
+{% else %}
+    <p>No hay comentarios</p>
+{% endif %}
+
+{% endblock %}

@@ -11,5 +11,10 @@ urlpatterns = [
     path('my-posts/', views.show_my_posts, name='my-posts'),
     path('my-post/<int:id>', views.show_my_post, name= 'view-my-post'),
     path('admin-show-posts', views.admin_posts, name= 'admin-posts'),
-    path('delete_post<int:id>', views.delete_post, name= 'delete_post')
+    path('delete_post<int:id>', views.delete_post, name= 'delete_post'),
+    path('donation', views.donation, name='donation'),
+    path('cash_register', views.cashRegister, name='cash_register'),
+    path('make_coment/', views.makeComent, name='make_coment'),
+    path('view_coments/', views.viewComents, name='view_coments'),
+    path('make_response/<int:id>', views.makeResponse, name='make_response')
 ]

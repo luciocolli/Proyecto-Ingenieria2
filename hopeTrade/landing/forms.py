@@ -28,4 +28,13 @@ class EditPublicationForm(forms.ModelForm):
             'state': forms.Select(choices=[('nuevo', 'Nuevo'), ('usado', 'Usado')]),
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+class cashRegisterForm(forms.Form):
+    cash = forms.CharField(label = 'Importe', widget=forms.TextInput())
+    name = forms.CharField(label = 'Nombre del donante', widget=forms.TextInput())
+    surname = forms.CharField(label = 'Apellido del donante', widget=forms.TextInput())
+    dniDonor = forms.CharField(label = 'DNI del donante', widget=forms.TextInput())
+
+class ComentPublicationForm(forms.Form):
+    text = forms.CharField(label = 'Texto', widget=forms.TextInput(), max_length=255)
         
