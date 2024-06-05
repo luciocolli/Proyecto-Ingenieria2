@@ -13,6 +13,10 @@
 
     {% for offer in myOffers %}
         <h2> <h2>{{ offer.post.title }}</h2></h2>
+        <p> {{ offer.description }}</p>
+        <p> {{ offer.date }}</p>
+        <p> {{ offer.hour|time:"H:i" }}</p>
+        <p> {{ offer.sede }}</p>
         <form method="POST" action="{% url 'cancel_offer' offer.id %}">
             {% csrf_token %}
             <button type="submit">Cancelar oferta</button>

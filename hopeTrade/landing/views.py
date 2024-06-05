@@ -66,8 +66,8 @@ def editPublication(request, publication_id):
     publication = get_object_or_404(Publication, id=publication_id)
     mensaje = None
 
-    def hasOffers(user):
-        return Offer.objects.exists(user)
+    def hasOffers(publication):
+        return Offer.objects.filter(post = publication).exists()
     
     def title_exists(new_title):
         return Publication.objects.filter(user = publication.user, title = new_title).exclude(id=publication.id).exists()
@@ -75,11 +75,18 @@ def editPublication(request, publication_id):
     def guardar_form():
         form.save()
         return 'Se han guardado los cambios correctamente'
+    
+    logged_user = request.user
+    myPosts = Publication.objects.filter(user=logged_user)
 
     
     # Verifica si el usuario logueado es el creador de la publicación
-    if publication.user != request.user and not hasOffers(publication.user):
-        mensaje = "No tienes permiso para editar esta publicación."
+    if hasOffers(publication):
+        mensaje = f'No se puede editar la publicacion "{publication.title}" porque ya cuenta con ofertas. Eliminala o Rechaza las ofertas pendientes'
+        return render(request, 'my-posts.html',{
+            'myPosts' : myPosts,
+            'msg': mensaje
+        })
 
     if request.method == 'POST':
         form = EditPublicationForm(request.POST, instance=publication)
@@ -91,7 +98,7 @@ def editPublication(request, publication_id):
                     publication.date = None
                     mensaje = guardar_form()
                 elif form.cleaned_data['date'] == None:
-                    mensaje = 'Debes ingresar una fecha de vencimiento'
+                    mensaje = 'La fecha de vencimiento es obligatoria para la categoría "Alimento" '
                 elif form.cleaned_data['date'] < date.today():
                     mensaje = 'No puedes ingresar productos vencidos'
                 else:
@@ -211,6 +218,7 @@ def admin_posts(request):
     if request.method == 'GET':
         categories = request.GET.getlist('category')
         search = request.GET.get('search', '')
+        
 
         if categories:
             # Filtrar publicaciones por categorías seleccionadas
@@ -250,12 +258,14 @@ def admin_posts(request):
 
         return render(request, 'admin-show-posts.html', {
             'posts': posts,
-            'msg': message
+            'msg': message,
+            'nombre_usuario' : request.user.name
         })
     else:
         posts = Publication.objects.all()
         return render(request, 'admin-show-posts.html', {
-            'posts': posts
+            'posts': posts,
+            'nombre_usuario' : request.user.name
         })
 
 #COMENTO XQ NO ME FUNCIONA (RAMI)
@@ -407,13 +417,13 @@ def offer_post(request, post_id):
 def show_my_offers(request, id):
     if request.method == 'GET':
         message = None
-        title = Publication.objects.get(id=id).title
-        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        publication = Publication.objects.get(id=id)
+        offers = Offer.objects.filter(post=publication)
         if not offers:
             message = 'No hay ofertas para esta publicación'
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
-            'title' :title,
+            'title' :publication.title,
             'msg' : message
         })
 
@@ -439,7 +449,7 @@ def decline_offer(request,id):
         offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
         offer.delete()
 
-        back.enviarMail(offer.user.mail,'Oferta rechazada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} a rechazado la oferta {offer.title}')
+        back.enviarMail(offer.user.mail,'Oferta rechazada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} a rechazado la oferta de la publicacion: {offer.post.title}')
 
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
@@ -471,7 +481,7 @@ def accept_offer(request,id):
             post_offer.save()  # Guarda los cambios en la base de datos
 
             # enviar mail al ofertador de oferta aceptada
-            back.enviarMail(offer.user.mail,'Oferta aceptada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} a aceptado la oferta {offer.title}')
+            back.enviarMail(offer.user.mail,'Oferta aceptada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} ha aceptado la oferta de la publicacion: {offer.post.title}')
 
             message = 'Oferta aceptada con éxito.'
 
@@ -485,7 +495,7 @@ def cancel_offer(request,id):
         message = 'Oferta cancelada'
         offer = get_object_or_404(Offer, id=id)
         offers = Offer.objects.filter(user=request.user)
-        back.enviarMail(offer.post.user.mail,'Oferta cancelada', f'Hola {offer.post.user.name}, el usuario {offer.user.name} {offer.user.surname} a cancelado la oferta {offer.title}')
+        back.enviarMail(offer.post.user.mail,'Oferta cancelada', f'Hola {offer.post.user.name}, el usuario {offer.user.name} {offer.user.surname} ha cancelado la oferta {offer.title}')
         offer.delete()
 
         return render(request, 'offers.html',{

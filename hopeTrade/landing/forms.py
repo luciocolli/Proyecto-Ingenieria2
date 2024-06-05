@@ -30,7 +30,7 @@ class CreateNewPublication(forms.Form):
         widget=forms.Select()
     )
     date = forms.DateField(
-        label='Fecha de Vencimiento',
+        label='Fecha de Vencimiento (Solo obligatoria para "Alimentos")',
         widget=forms.DateInput(attrs={'type': 'date'}),
         required=False
     )

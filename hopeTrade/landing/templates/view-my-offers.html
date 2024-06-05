@@ -13,8 +13,16 @@
 
     {% for offer in myOffers %}
         <div>
+            
+        
             <h2>{{ offer.user.name }} {{ offer.user.surname }}</h2>
-            <p>{{ offer.description }}</p>
+            <form method="GET" action="{% url 'profile' offer.user.id %}">
+                <button type="submit">Ver Usuario</button> 
+            </form>
+            <p> {{ offer.description }}</p>
+            <p> {{ offer.date }}</p>
+            <p> {{ offer.hour|time:"H:i" }}</p>
+            <p> {{ offer.sede }}</p>
             
             <form method="POST" action="{% url 'accept_offer' offer.id %}">
                 {% csrf_token %}
