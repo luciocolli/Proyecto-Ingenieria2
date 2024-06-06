@@ -292,8 +292,9 @@ def delete_post(request, id):
 
 @login_required
 def donation(request):
-    donations = CashDonation.objects.all()
-    total_donations = CashDonation.objects.aggregate(total= Sum('cash'))['total']
+    donations = CashDonation.objects.filter(date = date.today())
+    total_donations = donations.aggregate(total= Sum('cash'))['total']
+
     return render(request, 'donation.html',{
         'donations' : donations,
         'total_donations' : total_donations
