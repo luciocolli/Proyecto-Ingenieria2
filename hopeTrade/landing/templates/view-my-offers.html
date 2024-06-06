@@ -24,12 +24,12 @@
             <p> {{ offer.hour|time:"H:i" }}</p>
             <p> {{ offer.sede }}</p>
             
-            <form method="POST" action="{% url 'accept_offer' offer.id %}">
+            <form method="POST" action="{% url 'accept_offer' offer.id title %}">
                 {% csrf_token %}
                 <button type="submit">Aceptar oferta</button>
             </form>
 
-            <form method="POST" action="{% url 'decline_offer' offer.id %}">
+            <form method="POST" action="{% url 'decline_offer' offer.id title %}">
                 {% csrf_token %}
                 <button type="submit">Rechazar oferta</button>
             </form>

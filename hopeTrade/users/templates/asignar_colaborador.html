@@ -7,10 +7,9 @@
     <h1>Asignar Colaborador</h1>
 
     <h2>Lista de Usuarios</h1>
-    {% if msg %}
-        <div>{{ msg }}</div>
-    {% endif %}
-    
+    {% if msg or request.user.id == 3 %}
+        <p> No hay usuarios registrados </p>
+    {% else %}    
     <table>
         <thead>
             <tr>
@@ -43,5 +42,6 @@
         {% csrf_token %}
         <button>Eliminar Usuarios</button>
     </form>
+    {% endif %}
 
 {% endblock %}

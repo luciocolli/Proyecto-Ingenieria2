@@ -218,7 +218,7 @@ def admin_posts(request):
     if request.method == 'GET':
         categories = request.GET.getlist('category')
         search = request.GET.get('search', '')
-        
+        logged_user = request.user
 
         if categories:
             # Filtrar publicaciones por categorías seleccionadas
@@ -255,6 +255,8 @@ def admin_posts(request):
                 message = 'No hay publicaciones disponibles'
         else:
             message = None
+
+        posts = Publication.objects.exclude(user=logged_user).filter(isHide = False)
 
         return render(request, 'admin-show-posts.html', {
             'posts': posts,
@@ -442,25 +444,30 @@ def show_offers(request):
         })
 
 
-def decline_offer(request,id):
+def decline_offer(request,id, title):
     if request.method == 'POST':
         message = 'Oferta rechazada'
         offer = get_object_or_404(Offer, id=id)
-        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+
+        
+        publication = Publication.objects.get(id=offer.post_id)
+        offers = Offer.objects.filter(post=publication)
         offer.delete()
 
-        back.enviarMail(offer.user.mail,'Oferta rechazada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} a rechazado la oferta de la publicacion: {offer.post.title}')
+        back.enviarMail(offer.user.mail,'Oferta rechazada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} ha rechazado la oferta de la publicacion: {offer.post.title}')
 
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
-            'msg': message
+            'msg': message,
+            'title' : title,
         })
     
-def accept_offer(request,id):
+def accept_offer(request,id, title):
     if request.method == 'POST':
         message = None
         offer = get_object_or_404(Offer, id=id)
-        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        publication = Publication.objects.get(id=offer.post_id)
+        offers = Offer.objects.filter(post=publication)
         #offer.delete()
         
         # chequear que esa publicacion no este en un intercambio creado
@@ -487,7 +494,8 @@ def accept_offer(request,id):
 
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
-            'msg': message
+            'msg': message,
+            'title': title
         })
     
 def cancel_offer(request,id):
