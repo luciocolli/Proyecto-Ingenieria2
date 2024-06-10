@@ -2,7 +2,7 @@ from django import forms
 from .models import Publication
 from hopeTrade.settings import STATIC_URL, BASE_DIR
 import os
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timezone
 from django.core.exceptions import ValidationError
 
 def get_png_files():
@@ -95,8 +95,11 @@ class CreateNewOffer(forms.Form):
 
     def clean_hour(self):
         hour = self.cleaned_data['hour']
+        date = self.cleaned_data['date']
         if not (time(8, 0) <= hour <= time(20, 0)):
             raise ValidationError("La hora debe estar entre las 8am y las 8pm.")
+        if (date == datetime.now().date()) and hour < datetime.now(timezone.utc).time():
+            raise ValidationError("La fecha no puede ser una fecha pasada")
         return hour
         
 class cashRegisterForm(forms.Form):

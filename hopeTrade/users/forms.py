@@ -18,6 +18,18 @@ class CreatelogIn(forms.Form) :
                                                                                                          'max_value': 'El DNI ingresado no existe.'})
     password = forms.CharField(label="Contraseña", max_length=100, widget=forms.PasswordInput())
 
+class AddCard(forms.Form):
+    number = forms.CharField(label= 'Número de tarjeta',
+                             widget=forms.TextInput(),
+                             max_length=18, 
+                             min_length=13,
+                             error_messages={
+                                            'max_length': 'El número de la tarjeta no puede tener más de 18 caracteres.',
+                                            'min_length': 'El número de la tarjeta debe tener al menos 13 caracteres.',
+                                            'required': 'Este campo es obligatorio.',
+                                            'invalid': 'Ingrese un número de tarjeta válido.'
+                            })
+
 '''
 class EditProfileForm(forms.ModelForm):
     password_actual = forms.CharField(widget=forms.PasswordInput, required=False)

@@ -14,6 +14,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=128)
     rol = models.CharField(max_length=1, default=1)
 
+
     #Esto es para los many to many dijo chatgpt
 
     groups = models.ManyToManyField(Group, related_name='user_groups')
@@ -27,3 +28,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         superuser = kwargs.pop('superuser', False)
         self.is_superuser = superuser
         super().save(*args, **kwargs)
+
+
+class Card(models.Model):
+    number = models.CharField(max_length= 18, unique= True)
+    user = models.ForeignKey(User, on_delete= models.DO_NOTHING)

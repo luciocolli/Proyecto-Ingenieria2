@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if msg %}
+        <div>   
+            {{msg}}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button>
+            Agregar tarjeta
+        </button>
+    </form>
+
+{% endblock %}

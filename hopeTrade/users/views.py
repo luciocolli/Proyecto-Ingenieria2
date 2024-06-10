@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import User
+from .models import User, Card
 from landing.models import Publication
 from django.db import IntegrityError
-from .forms import CreateNewUser, CreatelogIn #, EditProfileForm
+from .forms import CreateNewUser, CreatelogIn, AddCard #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from datetime import datetime
@@ -193,3 +193,34 @@ def editarPerfil(request):
         return redirect('editar-perfil')
 
     return render(request, 'editar-perfil.html', {'user': user})
+
+def add_card(request):
+    
+    if request.method == 'GET':
+        return render(request, 'add_card.html', {
+            'form': AddCard()
+        })
+    else:
+
+        form = AddCard(request.POST)
+        message = None
+
+        if form.is_valid():
+
+            card_number = form.cleaned_data['number']
+
+            try:
+                Card.objects.create(
+                    number = card_number,
+                    user = request.user
+                )
+            except IntegrityError:
+                form.add_error(
+                    'number', 'La tarjeta ingresada ya se encuentra en el sistema'
+                )
+            else:
+                message = 'Tarjeta agregada con éxito'
+    return render(request, 'add_card.html', {'form': form,
+                                             'msg' : message})
+    
+    

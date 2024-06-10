@@ -42,4 +42,5 @@ class Coment(models.Model):
     publication = models.ForeignKey(Publication, on_delete =  models.CASCADE)
     text = models.CharField(max_length = 255)
 
+
     
