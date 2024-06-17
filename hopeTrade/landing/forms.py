@@ -3,6 +3,7 @@ from .models import Publication
 from hopeTrade.settings import STATIC_URL, BASE_DIR
 import os
 from datetime import date, datetime, time, timezone
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 def get_png_files():
@@ -85,22 +86,38 @@ class CreateNewOffer(forms.Form):
         widget=forms.Textarea(attrs={'rows': 8, 'cols': 60})
     )
 
+#   def clean_date(self):
+#        date = self.cleaned_data['date']
+#        if date.weekday() >= 5:  # 5 y 6 son sábado y domingo
+#            raise ValidationError("La fecha debe ser un día entre lunes y viernes.")
+#        if date < datetime.now().date():
+#            raise ValidationError("La fecha no puede ser una fecha pasada.")
+#       return date
+
+    # CAMBIAR PARA QUE NO SE PUEDAN REALIZAR INTERCAMBIOS EN EL MIMSMO DIA DE LA FECHA
     def clean_date(self):
-        date = self.cleaned_data['date']
-        if date.weekday() >= 5:  # 5 y 6 son sábado y domingo
-            raise ValidationError("La fecha debe ser un día entre lunes y viernes.")
-        if date < datetime.now().date():
-            raise ValidationError("La fecha no puede ser una fecha pasada.")
-        return date
+            date = self.cleaned_data['date']
+            if date.weekday() >= 5:  # 5 y 6 son sábado y domingo
+                raise ValidationError("La fecha debe ser un día entre lunes y viernes.")
+            if date < datetime.now().date():
+                raise ValidationError("La fecha no puede ser una fecha pasada.")
+            return date
 
     def clean_hour(self):
         hour = self.cleaned_data['hour']
         date = self.cleaned_data['date']
         if not (time(8, 0) <= hour <= time(20, 0)):
             raise ValidationError("La hora debe estar entre las 8am y las 8pm.")
-        if (date == datetime.now().date()) and hour < datetime.now(timezone.utc).time():
-            raise ValidationError("La fecha no puede ser una fecha pasada")
+    
+        now = datetime.now()
+
+        # Combina la fecha y la hora para verificar si están en el pasado
+        offer_datetime = datetime.combine(date, hour)
+        if offer_datetime < now:
+            raise ValidationError("La fecha y hora no pueden ser en el pasado.")
+
         return hour
+
         
 class cashRegisterForm(forms.Form):
     cash = forms.CharField(label = 'Importe', widget=forms.TextInput())
@@ -110,4 +127,25 @@ class cashRegisterForm(forms.Form):
 
 class ComentPublicationForm(forms.Form):
     text = forms.CharField(label = 'Texto', widget=forms.TextInput(), max_length=255)
+
+class articleRegisterForm(forms.Form):
+    article = forms.CharField(label = 'Articulo', widget=forms.TextInput())
+    category = forms.ChoiceField(label='Categoria', choices=[
+        ('Alimento', 'alimento'),
+        ('Electrodomestico', 'electrodomestico'),
+        ('Limpieza', 'limpieza'),
+        ('Higiene', 'higiene'),
+        ('Juguete', 'juguete')
+    ], widget=forms.Select())
+    name = forms.CharField(label = 'Nombre del donante', widget=forms.TextInput())
+    surname = forms.CharField(label = 'Apellido del donante', widget=forms.TextInput())
+    dniDonor = forms.CharField(label = 'DNI del donante', widget=forms.TextInput())
         
+class calificationForm(forms.Form):
+    calification = forms.ChoiceField(label= 'Calificacion', choices=[
+        (1 , 'uno'),
+        (2,  'dos'),
+        (3,  'tres'),
+        (4,  'cuatro'),
+        (5,  'cinco'),
+    ])

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>Intercambios pendientes del dia</h1>
+
+    {% if msg %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ msg }}
+        </div>
+    {% endif %}
+    
+    {% for intercambio in intercambios %}
+        <div>
+            <h2> {{intercambio.post.title}} </h2>
+            <p>Participantes:</p> 
+            <p> {{intercambio.post.user.name}}. Dni: {{intercambio.post.user.dni}} </p>
+            <p>{{intercambio.offerOwner.name}}. Dni: {{intercambio.offerOwner.dni}}</p>
+
+            <form action="{% url 'confirm_intercambio' intercambio.id %}" method="POST">
+                {% csrf_token %}
+                <button>Confirmar Intercambio</button>
+            </form>
+
+
+        </div>
+
+    {% endfor %}
+
+
+
+{% endblock %}

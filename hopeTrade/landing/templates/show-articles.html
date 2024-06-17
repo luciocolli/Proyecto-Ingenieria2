@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>Articulos Donados</h1>
+
+    {% if msg %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ msg }}
+        </div>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Articulo</th>
+                <th>Categoria</th>
+                <th>Fecha</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Dni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.article }}</td>
+                    <td>{{ article.category }}</td>
+                    <td>{{ article.date }}</td>
+                    <td>{{ article.name }}</td>
+                    <td>{{ article.surname}}</td>
+                    <td>{{ article.dniDonor }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

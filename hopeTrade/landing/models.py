@@ -42,5 +42,14 @@ class Coment(models.Model):
     publication = models.ForeignKey(Publication, on_delete =  models.CASCADE)
     text = models.CharField(max_length = 255)
 
+class ArticleDonation(models.Model):
+    article = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    name = models.CharField(max_length = 100, default='Sin Nombre')
+    surname = models.CharField(max_length = 100, default='Sin apellido')
+    dniDonor = models.CharField(max_length = 100)
+    date = models.DateField()
 
-    
+class Calification(models.Model):
+    user = models.ForeignKey(User, on_delete= models.CASCADE)
+    calification = models.IntegerField()

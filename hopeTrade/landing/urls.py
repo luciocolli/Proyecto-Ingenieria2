@@ -22,7 +22,13 @@ urlpatterns = [
     path('delete-users/', views.delete_all_users, name='delete-users'),
     path('donation', views.donation, name='donation'),
     path('cash_register', views.cashRegister, name='cash_register'),
+    path('article_register', views.article_register, name='article_register'),
+    path('show_articles', views.show_articles, name='show_articles'),
     path('make_coment/', views.makeComent, name='make_coment'),
     path('view_coments/', views.viewComents, name='view_coments'),
-    path('make_response/<int:id>', views.makeResponse, name='make_response')
+    path('make_response/<int:id>', views.makeResponse, name='make_response'),
+    path('show_intercambios_dia', views.show_intercambios_today, name='intercambios_today'),
+    path('confirm_intercambio/<int:id>/', views.confirm_intercambio, name='confirm_intercambio'),
+    #path('decline_intercambio/<int:id>', views.decline_intercambio, name='decline_intercambio'),
+    path('calificar-intercambio/<int:id>', views.calificar_intercambio, name='calificar-intercambio')
 ]

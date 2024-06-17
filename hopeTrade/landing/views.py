@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Publication, Offer, CashDonation, Coment, Intercambio
+from .models import Publication, Offer, CashDonation, Coment, Intercambio, ArticleDonation
 from django.db import IntegrityError
 from users.models import User
-from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer
+from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer, articleRegisterForm, calificationForm
 from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
 from django.utils import timezone
+from datetime import datetime
 from django.db.models import Sum
 from users import backend as back
 from datetime import date
@@ -504,3 +505,91 @@ def delete_all_users(request):
 
         users_to_delete.delete()
         return redirect('view_asignar_colaborador')
+    
+
+def article_register(request):
+     if request.method == 'GET':
+        return render(request, 'articleRegister.html', {
+            'form': articleRegisterForm()
+        })
+     else:
+        form = articleRegisterForm(request.POST)
+        if form.is_valid() :
+            ArticleDonation.objects.create(
+                article = request.POST['article'],
+                category = request.POST['category'],
+                date = timezone.now(),
+                name = request.POST['name'],
+                surname = request.POST['surname'],
+                dniDonor = request.POST['dniDonor']
+            )
+            message = 'Donación de articulo registrada con exito.'
+            return render(request, 'articleRegister.html',{
+                'form': articleRegisterForm(),
+                'msg': message
+            })
+        
+def show_articles(request):
+    if request.method == 'GET':
+        articles = ArticleDonation.objects.all()
+        if not articles:
+            message = 'No se registraron donaciones de articulos.'
+        else:
+            message = None
+        
+        return render(request, 'show-articles.html',{
+            'articles': articles,
+            'msg': message
+        })
+    
+def show_intercambios_today(request):
+    if request.method == 'GET':
+        today = datetime.now().date()
+        intercambios = Intercambio.objects.filter(isDone = False, date = today) # chequear
+
+        if not intercambios :
+            message = 'No hay intercambios pendientes en el dia de la fecha.'
+        else:
+            message = None
+        
+        return render(request, 'show-intercambios-dia.html', {
+            'intercambios': intercambios,
+            'msg': message
+        })
+    
+def confirm_intercambio(request, id):
+    if request.method == 'POST':
+        #agarrar intercambio con el id que llega
+        url = 'http://127.0.0.1:8000/calificar-intercambio'
+        intercambio = get_object_or_404(Intercambio, id = id)
+
+        #poner isDone = True
+        intercambio.isDone = True
+
+        #mandar mails a integrantes con link para calificacion
+        user1 = intercambio.post.user
+        user2 = intercambio.offerOwner
+
+        #back.send_email('http://127.0.0.1:8000/', user1.mail)
+        back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{user2.id}')
+        back.enviarMail(user2.mail, 'Calificar Intercambio', f'Hola {user2.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{user1.id}')
+
+        return render(request, 'show-intercambios-dia.html')
+       # back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Por favor, califica tu experiencia aquí: <a href="URL_DE_TU_SITIO_PARA_CALIFICAR">Calificar Intercambio</a>')
+       # back.enviarMail(user1.mail,'Calificar Intercambio', f'Hola {user1.name} nos gustaria que nos dejes tu reseña con una calificacion sobre el intercambio. Entra aqui: <a href="URL_DE_TU_SITIO_PARA_CALIFICAR">Calificar Intercambio</a> ')
+       # back.enviarMail(user2.mail,'Calificar Intercambio', f'Hola {user2.name} nos gustaria que nos dejes tu reseña con una calificacion sobre el intercambio ')
+    
+
+
+
+#def decline_intercambio(request, id):
+
+@login_required
+def calificar_intercambio(request, id):
+    if request.method == "GET":
+        render(request, 'calificar-intercambio.html', {
+             'form': calificationForm(),
+             'id': id
+        })
+    #else:
+        

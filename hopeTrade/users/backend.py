@@ -5,6 +5,11 @@ from django.core.mail import EmailMessage
 from hopeTrade import settings
 from datetime import datetime, time
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from hopeTrade.settings import EMAIL_HOST_USER  # Asegúrate de tener una variable EMAIL_FROM en tus settings
+
+
 
 def calculate_califications():
     return 1.0
@@ -38,6 +43,18 @@ def enviarMail(mail, asunto, cuerpo):
         # Imprime la excepción para depuración
         print(f"Error al enviar el correo: {e}")
         return False
+    
+def send_email(site_id, email):
+    subject = "Sub"
+    from_email, to = EMAIL_HOST_USER, email
+    text_content = 'Text'
+    html_content = render_to_string(
+        'app/includes/email.html',
+        {'pk': site_id}
+    )
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
     
 def diaValido(date):
     today = datetime.now().date()

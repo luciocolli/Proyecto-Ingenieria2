@@ -20,7 +20,7 @@
             </li>
             {% if request.user.rol == "2" or request.user.rol == "3" %}
                 <li>
-                    <a href="#"> Ver intercambios del dia </a> <!--agregar ruta de intercambios del dia-->
+                    <a href="{% url 'intercambios_today' %}"> Ver intercambios del dia </a> 
                 </li>
             {% endif %}
             {% if request.user.rol == "2" or request.user.rol == "3" %}

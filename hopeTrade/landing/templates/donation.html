@@ -23,9 +23,10 @@
     <h1>Donaciones</h1>
 
     <a href="{% url 'cash_register' %}"><button>Registrar donacion en efectivo</button></a>
-    <a href="{% url 'donation' %}"><button>Registrar donacion de Articulo</button></a>
+    <a href="{% url 'article_register' %}"><button>Registrar donacion de Articulo</button></a>
     <button id="indice1">Listar donaciones en Efectivo</button>
-    <button id="indice2">Listar donaciones de Articulos</button>
+    <!-- <button id="indice2">Listar donaciones de Articulos</button> CAMBIO ESTE BOTON PARA LISTAR ARTICULOS DONADOS -->
+    <a href="{% url 'show_articles' %}"><button>Listar donaciones de Articulos</button></a>
     <div id="caja1" class="caja" style="display: none;">
         {% if donations %}
             <table>
