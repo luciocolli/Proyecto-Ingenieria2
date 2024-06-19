@@ -584,8 +584,8 @@ def confirm_intercambio(request, id):
         user2 = intercambio.offerOwner
 
         #back.send_email('http://127.0.0.1:8000/', user1.mail)
-        back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{user2.id}')
-        back.enviarMail(user2.mail, 'Calificar Intercambio', f'Hola {user2.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{user1.id}')
+        back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{id}')
+        back.enviarMail(user2.mail, 'Calificar Intercambio', f'Hola {user2.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{id}')
 
         return render(request, 'show-intercambios-dia.html')
        # back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Por favor, califica tu experiencia aquí: <a href="URL_DE_TU_SITIO_PARA_CALIFICAR">Calificar Intercambio</a>')
@@ -604,24 +604,25 @@ def decline_intercambio(request, id):
         Intercambio.objects.delete(id=id)
 
 @login_required
-def calificar_intercambio(request, id): # id del usuario a ser calificado
+def calificar_intercambio(request, id): # id del intercambio del
 
-    # Tomo el usuario a ser calificado
-    calificated_user = User.objects.get(id=id)
+    # Tomo el intercambio a ser calificado
+    intercambio = Intercambio.objects.get(id=id)
 
     if request.method == "GET":
         return render(request, 'calificar-intercambio.html', {
                 'form': calificationForm(),
-                'user_name': calificated_user.name
+                'intercambio': intercambio.post.title
             })
     else:
         form = calificationForm(request.POST)
 
         if form.is_valid():
             Calification.objects.create(
-                user = calificated_user,
+                intercambio = intercambio,
+                user = request.user,
                 calification = request.POST['calification']
             )
 
         return render(request, 'show-all-posts.html')
-        
+

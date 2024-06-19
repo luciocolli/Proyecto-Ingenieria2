@@ -51,5 +51,6 @@ class ArticleDonation(models.Model):
     date = models.DateField()
 
 class Calification(models.Model):
-    user = models.ForeignKey(User, on_delete= models.CASCADE)
+    intercambio = models.ForeignKey(Intercambio,null=True, on_delete= models.CASCADE)
     calification = models.IntegerField()
+    user = models.ForeignKey(User, on_delete= models.CASCADE)

@@ -143,9 +143,11 @@ class articleRegisterForm(forms.Form):
         
 class calificationForm(forms.Form):
     calification = forms.ChoiceField(label= 'Calificacion', choices=[
-        (1 , 'uno'),
-        (2,  'dos'),
-        (3,  'tres'),
-        (4,  'cuatro'),
-        (5,  'cinco'),
-    ])
+        (1 , '⭐'),
+        (2,  '⭐⭐'),
+        (3,  '⭐⭐⭐'),
+        (4,  '⭐⭐⭐⭐'),
+        (5,  '⭐⭐⭐⭐⭐'),
+        ],
+        widget=forms.RadioSelect,
+    )

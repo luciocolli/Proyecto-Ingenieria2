@@ -15,7 +15,7 @@ urlpatterns = [
     path('view-profile/<int:id>', views.view_profile, name= 'profile'),
     path('user-posts/<int:id>', views.view_posts, name= 'user-posts'),
     path('user-exchages/', views.view_exchanges, name= 'user-exchanges'),
-    path('user-ratings/', views.view_ratings, name= 'user-ratings'),
+    path('user-ratings/<int:id>', views.view_ratings, name= 'user-ratings'),
     path('logout/', views.user_logout, name='logout'),
     path('add-card/', views.add_card, name='add-card'),
 ] 
