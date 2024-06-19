@@ -29,6 +29,6 @@ urlpatterns = [
     path('make_response/<int:id>', views.makeResponse, name='make_response'),
     path('show_intercambios_dia', views.show_intercambios_today, name='intercambios_today'),
     path('confirm_intercambio/<int:id>/', views.confirm_intercambio, name='confirm_intercambio'),
-    #path('decline_intercambio/<int:id>', views.decline_intercambio, name='decline_intercambio'),
+    path('decline_intercambio/<int:id>', views.decline_intercambio, name='decline_intercambio'),
     path('calificar-intercambio/<int:id>', views.calificar_intercambio, name='calificar-intercambio')
 ]

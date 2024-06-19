@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Publication, Offer, CashDonation, Coment, Intercambio, ArticleDonation
+from .models import Publication, Offer, CashDonation, Coment, Intercambio, ArticleDonation, Calification
 from django.db import IntegrityError
 from users.models import User
 from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer, articleRegisterForm, calificationForm
@@ -24,6 +24,19 @@ def about(request):
 
 @login_required
 def createPublication(request):
+
+
+    # def exists_title(user, title):
+    """
+    Esta función debe verificar que el usuario no contenga publicaciones 
+    actuales con el nombre recibido, pero si puede contener intercambios
+    realizados con ese nombre
+    """
+    #     try: 
+    #         # Tomo las publicaciones del usuario que no se encuentran en ningún intercamvbi
+    #         post = Publication.objects.all(user=user, title= title, isHide= False)
+        
+
     if request.method == 'GET':
         return render(request, 'createPublication.html', {
             'form': CreateNewPublication()
@@ -582,14 +595,33 @@ def confirm_intercambio(request, id):
 
 
 
-#def decline_intercambio(request, id):
+def decline_intercambio(request, id):
+    if request.method == 'POST':
+        intercambio = get_object_or_404(Intercambio, id= id)
+
+        intercambio.post.isHide = False
+
+        Intercambio.objects.delete(id=id)
 
 @login_required
-def calificar_intercambio(request, id):
+def calificar_intercambio(request, id): # id del usuario a ser calificado
+
+    # Tomo el usuario a ser calificado
+    calificated_user = User.objects.get(id=id)
+
     if request.method == "GET":
-        render(request, 'calificar-intercambio.html', {
-             'form': calificationForm(),
-             'id': id
-        })
-    #else:
+        return render(request, 'calificar-intercambio.html', {
+                'form': calificationForm(),
+                'user_name': calificated_user.name
+            })
+    else:
+        form = calificationForm(request.POST)
+
+        if form.is_valid():
+            Calification.objects.create(
+                user = calificated_user,
+                calification = request.POST['calification']
+            )
+
+        return render(request, 'show-all-posts.html')
         

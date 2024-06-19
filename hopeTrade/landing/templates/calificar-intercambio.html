@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>title</title>
-</head>
-<body>
-    <a href="https://yoursite.com{% url 'mail_view' pk %}">Click</a>
-</body>
-</html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <h1>Calificar a {{user_name}}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button>
+            Calificar
+        </button>
+    </form>
+
+
+{% endblock %}
