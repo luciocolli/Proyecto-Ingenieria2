@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import User, Card
 from landing.models import Publication
 from django.db import IntegrityError
-from .forms import CreateNewUser, CreatelogIn, AddCard #, EditProfileForm
+from .forms import CreateNewUser, CreatelogIn, AddCard, DeleteCard #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from datetime import datetime
@@ -216,11 +216,35 @@ def add_card(request):
                 )
             except IntegrityError:
                 form.add_error(
-                    'number', 'La tarjeta ingresada ya se encuentra en el sistema'
+                    'number', 'No se puede cargar dos veces la misma tarjeta'
                 )
             else:
                 message = 'Tarjeta agregada con éxito'
-    return render(request, 'add_card.html', {'form': form,
-                                             'msg' : message})
+            finally:
+                return render(request, 'add_card.html', {'form': form,
+                                                        'msg' : message})
+            
+def delete_card(request):
+    msg = None
+    form = DeleteCard(user= request.user)
+    if request.method == 'GET':
+        return render(request, 'delete_card.html', {
+            'form': form,
+            'msg' : msg
+        })
+    else:
+        if form.is_valid():
+            print(request.POST['card'])
+            Card.objects.delete(user= request.user, number= request.POST.get('card'))
+            
+            msg = 'Tarjeta eliminada correctamente'
+    return render(request, 'delete_card.html',{
+        'form' : form,
+        'msg' : msg
+    })
+            
+
+
+
     
     

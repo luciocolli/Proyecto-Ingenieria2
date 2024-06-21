@@ -1,5 +1,5 @@
 from django import forms
-#from .models import User
+from .models import Card
 #from . import backend as back
 
 class CreateNewUser(forms.Form):
@@ -29,39 +29,21 @@ class AddCard(forms.Form):
                                             'required': 'Este campo es obligatorio.',
                                             'invalid': 'Ingrese un número de tarjeta válido.'
                             })
-
-'''
-class EditProfileForm(forms.ModelForm):
-    password_actual = forms.CharField(widget=forms.PasswordInput, required=False)
-    nueva_password = forms.CharField(widget=forms.PasswordInput, required=False)
-    
-    class Meta:
-        model = User
-        fields = ['name', 'surname', 'date', 'mail']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password_actual = cleaned_data.get('password_actual')
-        nueva_password = cleaned_data.get('nueva_password')
-
-        anios = cleaned_data.get('date')
+class DeleteCard(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        super(DeleteCard, self).__init__(*args, **kwargs)
+        self.user = user
 
 
-        #Si saco este chequeo se rompe la pagina
-        if anios is None:
-            raise forms.ValidationError('La fecha de nacimiento es requerida.')
-
-        #Chequeo 18 anios
+        try:
+            cards= Card.objects.filter(user=self.user.id)
+            cards_numbers = [(card.id, card.number) for card in cards]
+        except:
+            cards_numbers = [('', 'Aquí aparecerán sus tarjetas cargadas')]
         
-        if back.get_years(anios) < 18:
-            raise forms.ValidationError('Debes ser mayor de 18 años para modificar tu perfil.')
+        # Definir el campo de elección con las tarjetas filtradas
+        self.fields['card'] = forms.ChoiceField(label='Tarjetas', choices=cards_numbers)
 
-        # Verificar si tanto la contraseña actual como la nueva contraseña están en blanco
-        if not password_actual and not nueva_password:
-            return cleaned_data
-
-        if (password_actual and not nueva_password) or (nueva_password and not password_actual):
-            raise forms.ValidationError('Se deben proporcionar la contraseña actual y la nueva contraseña.')
-
-        return cleaned_data
-'''
+    def get_user(self):
+        print(self.user)
+        return self.user

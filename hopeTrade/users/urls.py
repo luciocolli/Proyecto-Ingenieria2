@@ -18,5 +18,6 @@ urlpatterns = [
     path('user-ratings/', views.view_ratings, name= 'user-ratings'),
     path('logout/', views.user_logout, name='logout'),
     path('add-card/', views.add_card, name='add-card'),
+    path('delete-card/', views.delete_card, name='delete-card'),
 ] 
 
