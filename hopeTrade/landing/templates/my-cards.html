@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% csrf_token %}
+    <h1>Mis Tarjetas</h1>
+
+    {% if msg %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ msg }}
+    </div>
+    {% endif %}
+    <ul>
+        {% for card in myCards %}
+            <li>
+                <span>{{ card.number }}</span>
+                <form method="POST" action="{% url 'delete-card' card.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Eliminar Tarjeta</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

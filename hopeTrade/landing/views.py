@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Publication, Offer, CashDonation, Coment, Intercambio, ArticleDonation, Calification
 from django.db import IntegrityError
-from users.models import User
+from users.models import User, Card
 from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer, articleRegisterForm, calificationForm
 from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
@@ -625,3 +625,34 @@ def calificar_intercambio(request, id): # id del usuario a ser calificado
 
         return render(request, 'show-all-posts.html')
         
+
+
+def show_my_cards(request):
+    if request.method == 'GET':
+        logged_user = request.user
+        myCards = Card.objects.filter(user = logged_user)
+
+        if not myCards:
+            message = 'No hay tarjetas cargadas'
+        else:
+            message = None
+        
+    return render(request, 'my-cards.html',{
+        'myCards' : myCards,
+        'msg': message
+    })
+
+def delete_card(request, id):
+    if request.method == 'POST': 
+        message = None
+        card = get_object_or_404(Card, id=id, user=request.user)
+        
+        card.delete()
+        message = 'Tarjeta eliminada con exito.'
+
+        myCards = Card.objects.filter(user=request.user)
+
+        return render(request, 'my-cards.html', {
+            'myCards' : myCards,
+            'msg': message
+        })
