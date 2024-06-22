@@ -124,7 +124,7 @@ def view_ratings(request, id):
         promedio = user_calificaciones.aggregate(Avg('calification'))['calification__avg']
         message = None
         if not user_calificaciones:
-            message = "No posees calificaciones registradas"
+            message = "No posees calificaciones registradas."
 
         # Procesar cada calificación para convertirla en estrellas
         for calificacion in user_calificaciones:

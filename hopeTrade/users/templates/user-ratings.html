@@ -3,7 +3,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Calificaciones de {{ user.name }} {{ user.surname }}</h1>
+    <style>
+
+        .texto {
+            color: #34495e; /* Cambia el color según tus necesidades */
+            font-family: Arial, Helvetica, sans-serif; /* Ajusta la fuente si es necesario */
+            background-color: #ecf0f1; /* Fondo claro */
+            border-radius: 5px; /* Bordes redondeados */
+            padding: 10px; /* Ajusta el relleno según sea necesario */
+            margin: 10px 0; /* Margen superior e inferior */
+            display: inline-block; /* Asegura que el botón se ajuste al contenido */
+        }
+
+        /* Estilo para los botones */
+        .button {
+            color: #e8e8e7;
+            font-family: Arial, Helvetica, sans-serif;
+            text-decoration: none;
+            padding: 5px 10px; /* Ajusta el padding para el tamaño del botón */
+            border-radius: 5px;
+            background-color: #92b268;
+            margin: 5px 0;
+            display: inline-block;
+        }
+
+        .alert {
+            color: #e8e8e7;
+            font-family: Arial, Helvetica, sans-serif;
+            text-decoration: none;
+            padding: 5px 10px; /* Ajusta el padding para el tamaño del botón */
+            border-radius: 5px;
+            background-color: #34495e;
+            margin: 5px 0;
+            display: inline-block;
+        }
+        
+    </style>
+
+    <div>
+        <h1 class="button">Calificaciones de {{ user.name }} {{ user.surname }}</h1>
+    </div>
+    
 
     {% if msg %}
     <div class="alert alert-info">
@@ -11,14 +51,15 @@
     </div>
     {% endif %}
 
-
     {% if promedio is not None %}
-    <h2>Promedio de Calificaciones: {{ promedio }}</h2>
+        <div>
+            <h2 class="button">Promedio de Calificaciones: {{ promedio }}</h2>
+        </div>
     {% endif %}
 
     {% for calificacion in user_calificaciones %}
     <div>
-        <h3>{{ calificacion.user.name }} {{ calificacion.user.surname }} Calificó: {{ calificacion.calification }} </h3>
+        <h3 class="texto">{{ calificacion.user.name }} {{ calificacion.user.surname }} Calificó: {{ calificacion.calification }}</h3>
     </div>
     {% endfor %}
 
