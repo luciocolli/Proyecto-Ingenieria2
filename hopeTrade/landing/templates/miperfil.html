@@ -42,9 +42,7 @@
             <div class="divEditar">
                 <a href="#"><button>Ver Intercambios</button></a>
             </div>
-            <div class="divEditar">
-                <a href="#"><button>Ver Calificaciones</button></a>
-            </div>
+            <a href="{% url 'user-ratings' id=user.id %}" class="btn btn-primary"><button>Ver Calificaciones</button></a>
             <div class="divEditar">
                 <a href="{%url 'offers'%}"><button>Ver mis ofertas</button></a>
             </div>

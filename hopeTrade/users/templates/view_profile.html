@@ -13,6 +13,6 @@
     <br>
     <a href="{% url 'user-posts' id %}"><button>Ver Publicaciones</button></a>  
     <a href="#"><button>Ver Intercambios</button></a>  <!--{% url 'user-exchanges' %}-->
-    <a href="#"><button>Ver Calificaciones</button></a> <!--{% url 'user-ratings' %}-->
+    <a href="{% url 'user-ratings' id=id %}"><button>Ver Calificaciones</button></a>
 
 {% endblock %}

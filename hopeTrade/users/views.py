@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User, Card
-from landing.models import Publication
+from landing.models import Publication, Calification, Intercambio
 from django.db import IntegrityError
 from .forms import CreateNewUser, CreatelogIn, AddCard #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
@@ -9,7 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 from django.contrib.auth.decorators import login_required, admin_required
 from . import backend as back
-
+from django.db.models import Avg, Q
 # Create your views here.
 
 def index(request):
@@ -115,9 +115,32 @@ def view_exchanges(request):
         return render(request, 'user-exchanges.html')
 
 @login_required
-def view_ratings(request):
+def view_ratings(request, id):
     if request.method == 'GET':
-        return render(request, 'user-ratings.html')
+
+        #Agarro usuario del GET, y sus Calificaciones
+        user = get_object_or_404(User, id=id)
+        user_calificaciones = Calification.objects.filter(Q(intercambio__post__user=user) | Q(intercambio__offerOwner=user)).exclude(user=user)
+        promedio = user_calificaciones.aggregate(Avg('calification'))['calification__avg']
+        message = None
+        if not user_calificaciones:
+            message = "No posees calificaciones registradas."
+
+        # Procesar cada calificación para convertirla en estrellas
+        for calificacion in user_calificaciones:
+            calificacion.calification = calificacion_con_estrellas(calificacion.calification)
+
+        return render(request, 'user-ratings.html',{
+            'msg': message,
+            'user_calificaciones': user_calificaciones,
+            'promedio': promedio,
+            'user': user,
+        })
+
+def calificacion_con_estrellas(calificacion):
+    # Mapea el número de calificación a emojis de estrellas
+    estrellas = '⭐️' * int(calificacion)
+    return estrellas
 
 @login_required
 def user_logout(request):
