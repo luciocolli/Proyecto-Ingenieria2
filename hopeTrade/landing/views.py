@@ -604,7 +604,7 @@ def decline_intercambio(request, id):
         Intercambio.objects.delete(id=id)
 
 @login_required
-def calificar_intercambio(request, id): # id del intercambio del
+def calificar_intercambio(request, id): # id del intercambio
 
     # Tomo el intercambio a ser calificado
     intercambio = Intercambio.objects.get(id=id)
@@ -618,6 +618,7 @@ def calificar_intercambio(request, id): # id del intercambio del
     else:
         form = calificationForm(request.POST)
 
+        #Caso fallido
         if Calification.objects.filter(user=request.user, intercambio_id=id).exists():
             message = "Ya realizaste una calificación para este intercambio."
             return render(request, 'calificar-intercambio.html', {
@@ -626,16 +627,20 @@ def calificar_intercambio(request, id): # id del intercambio del
                 'msg': message
             })
 
+        #Caso exitoso
         if form.is_valid():
+            message = "Calificación exitosa."
             Calification.objects.create(
                 intercambio = intercambio,
                 user = request.user,
                 calification = request.POST['calification']
             )
 
-        return render(request, 'show-all-posts.html')
-
-
+        return render(request, 'calificar-intercambio.html', {
+                'form': calificationForm(),
+                'intercambio': intercambio.post.title,
+                'msg': message
+            })
 
 def show_my_cards(request):
     if request.method == 'GET':
