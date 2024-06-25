@@ -5,7 +5,22 @@
 
 {% block content %}
 
+    <style>
+        .texto {
+            color: #23303d; /* Cambia el color según tus necesidades */
+            font-family: Arial, Helvetica, sans-serif; /* Ajusta la fuente si es necesario */
+            background-color: #d4d5d6; /* Fondo claro */
+            border-radius: 5px; /* Bordes redondeados */
+            padding: 10px; /* Ajusta el relleno según sea necesario */
+            margin: 10px 0; /* Margen superior e inferior */
+            display: inline-block; /* Asegura que el botón se ajuste al contenido */
+        }
+
+    </style>
+
     <h1>Calificar intercambio de: {{intercambio}}</h1>
+
+    
 
     <form method="POST">
         {% csrf_token %}
@@ -15,5 +30,10 @@
         </button>
     </form>
 
+    {% if msg %}
+    <div class="texto">
+        {{ msg }}
+    </div>
+    {% endif %}
 
 {% endblock %}

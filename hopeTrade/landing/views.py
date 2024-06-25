@@ -608,14 +608,23 @@ def calificar_intercambio(request, id): # id del intercambio del
 
     # Tomo el intercambio a ser calificado
     intercambio = Intercambio.objects.get(id=id)
-
+    message = None
     if request.method == "GET":
         return render(request, 'calificar-intercambio.html', {
                 'form': calificationForm(),
-                'intercambio': intercambio.post.title
+                'intercambio': intercambio.post.title,
+                'msg': message
             })
     else:
         form = calificationForm(request.POST)
+
+        if Calification.objects.filter(user=request.user, intercambio_id=id).exists():
+            message = "Ya realizaste una calificación para este intercambio."
+            return render(request, 'calificar-intercambio.html', {
+                'form': calificationForm(),
+                'intercambio': intercambio.post.title,
+                'msg': message
+            })
 
         if form.is_valid():
             Calification.objects.create(
