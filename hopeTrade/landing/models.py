@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User  # me traigo la clase User desde la carpeta users
+from users.models import User, Card  # me traigo la clase User desde la carpeta users
 
 # Create your models here.
 
@@ -32,6 +32,14 @@ class Intercambio(models.Model):
 class CashDonation(models.Model):
     cash = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
+    name = models.CharField(max_length = 100, default='Sin Nombre')
+    surname = models.CharField(max_length = 100, default='Sin apellido')
+    dniDonor = models.CharField(max_length = 100)
+
+class TransferDonation(models.Model):
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    card = models.ForeignKey(Card, on_delete= models.DO_NOTHING)
     name = models.CharField(max_length = 100, default='Sin Nombre')
     surname = models.CharField(max_length = 100, default='Sin apellido')
     dniDonor = models.CharField(max_length = 100)

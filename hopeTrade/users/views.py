@@ -1,12 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User, Card
+from landing.models import TransferDonation as transfer
 from landing.models import Publication, Calification, Intercambio
 from django.db import IntegrityError
-from .forms import CreateNewUser, CreatelogIn, AddCard #, EditProfileForm
+from .forms import CreateNewUser, CreatelogIn, AddCard, TransferDonation #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from datetime import datetime
+from datetime import date
 from django.contrib.auth.decorators import login_required, admin_required
 from . import backend as back
 from django.db.models import Avg, Q
@@ -245,5 +247,44 @@ def add_card(request):
                 message = 'Tarjeta agregada con éxito'
     return render(request, 'add_card.html', {'form': form,
                                              'msg' : message})
+
+
+def make_transfer_donation(request):
+
+    def has_founds(card, form):
+        if card.has_funds:
+            transfer.objects.create(
+                amount = form.cleaned_data['amount'],
+                date = date.today(),
+                card = card,
+                name = request.user.name,
+                surname = request.user.surname,
+                dniDonor = request.user.dni
+            )
+            return 'Se ha realizado la transferencia correctamente'
+        return 'La tarjeta ingresada no posee fondos'
+
     
-    
+    if request.method == 'GET':
+        return render(request, 'make_transfer_donation.html', {
+            'form' : TransferDonation()
+        })
+    else:
+        form = TransferDonation(request.POST)
+        message = None
+
+        if form.is_valid():
+
+            try:
+                card_number = form.cleaned_data['number']
+                card = Card.objects.filter(number= card_number, user = request.user).first()
+                message = has_founds(card, form)
+            except Exception as e:
+                message = 'La tarjeta no se encuentra registrada en el sistema'
+
+        return render(request, 'make_transfer_donation.html', {
+                'form' : TransferDonation(),
+                'msg' : message
+            })
+
+

@@ -29,6 +29,21 @@ class AddCard(forms.Form):
                                             'required': 'Este campo es obligatorio.',
                                             'invalid': 'Ingrese un número de tarjeta válido.'
                             })
+ 
+
+class TransferDonation(forms.Form):
+    number = forms.CharField(label= 'Número de tarjeta',
+                             widget=forms.TextInput(),
+                             max_length=18, 
+                             min_length=13,
+                             error_messages={
+                                            'max_length': 'El número de la tarjeta no puede tener más de 18 caracteres.',
+                                            'min_length': 'El número de la tarjeta debe tener al menos 13 caracteres.',
+                                            'required': 'Este campo es obligatorio.',
+                                            'invalid': 'Ingrese un número de tarjeta válido.'
+                            })
+    amount = forms.FloatField(label = 'Monto en pesos',required= True, error_messages={'invalid' : 'Este campo debe contenter solo números'})
+ 
 
 '''
 class EditProfileForm(forms.ModelForm):

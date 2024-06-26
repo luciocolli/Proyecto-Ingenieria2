@@ -18,5 +18,6 @@ urlpatterns = [
     path('user-ratings/<int:id>', views.view_ratings, name= 'user-ratings'),
     path('logout/', views.user_logout, name='logout'),
     path('add-card/', views.add_card, name='add-card'),
+    path('make-transfer-donation/', views.make_transfer_donation, name='make-donation'),
 ] 
 
