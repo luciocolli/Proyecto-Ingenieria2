@@ -27,23 +27,11 @@ h1 {
     margin-top: 10px;
 }
 
-button {
-    color: #fff; 
-    background-color: #abb444; 
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    text-decoration: none;
-}
-
-button:hover {
-    background-color: #92b268;
-}
-
 a {
     color: #abb444;
     text-decoration: none;
+    
+    
 }
 
 a:hover {

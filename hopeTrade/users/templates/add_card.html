@@ -5,17 +5,17 @@
 {% block content %}
 
     {% if msg %}
-        <div>   
+        <div class="alerta1 alert-{{ message.tags }}">  
             {{msg}}
         </div>
     {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        {{form}}
-        <button>
-            Agregar tarjeta
-        </button>
-    </form>
+    <div>
+       <form method="POST"class="texto1">
+            {% csrf_token %}
+            {{form}}
+            <button class="boton2">Agregar tarjeta</button>
+        </form> 
+    </div>
+    
 
 {% endblock %}

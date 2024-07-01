@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% block content %}
-<h1>Editar Publicación</h1>
-<form method="POST" class="publication-form">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="id_title">Titulo:</label>
-        <input type="text" id="id_title" name="title" value="{{ form.title.value }}">
-    </div>
-    <div class="form-group">
-        <label for="id_description">Descripcion:</label>
-        <input type="text" id="id_description" name="description" value="{{ form.description.value }}">
-    </div>
-    <div class="form-group">
-        <label for="id_category">Categoria:</label>
-        {{ form.category }}
-    </div>
-    <div class="form-group">
-        <label for="id_state">Estado del Producto:</label>
-        {{ form.state }}
-    </div>
-    <div class="form-group">
-        <label for="id_date">Fecha de Vencimiento:</label>
-        {{ form.date }}
-    </div>
-    <div class="form-group">
-        <label for="id_file">Nombre del archivo png:</label>
-        <input type="text" id="id_file" name="file" value="{{ form.file.value }}">
-    </div>
-    <button type="submit">Guardar Cambios</button>
-</form>
+<div>
+    <h1 class="texto2">Editar Publicación</h1>
+</div>
+
+<div  class="texto1">
+    <form method="POST" class="publication-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_title">Titulo:</label>
+            <input type="text" id="id_title" name="title" value="{{ form.title.value }}">
+        </div>
+        <div class="form-group">
+            <label for="id_description">Descripcion:</label>
+            <input type="text" id="id_description" name="description" value="{{ form.description.value }}">
+        </div>
+        <div class="form-group">
+            <label for="id_category">Categoria:</label>
+            {{ form.category }}
+        </div>
+        <div class="form-group">
+            <label for="id_state">Estado del Producto:</label>
+            {{ form.state }}
+        </div>
+        <div class="form-group">
+            <label for="id_date">Fecha de Vencimiento:</label>
+            {{ form.date }}
+        </div>
+        <div class="form-group">
+            <label for="id_file">Nombre del archivo png:</label>
+            <input type="text" id="id_file" name="file" value="{{ form.file.value }}">
+        </div>
+        <button type="submit" class="boton3">Guardar Cambios</button>
+    </form>
+</div>
+
 {% if mensaje %}
-    <div>{{ mensaje }}</div>
+    <div class="alerta1">{{ mensaje }}</div>
 {% endif %}
+
 {% endblock %}

@@ -3,35 +3,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if coments %}
 
 <style>
     .respuesta {
-    margin-left: 30px;
+    margin-left: 50px;
 }
 </style>
-    <h2>Comentarios de la publicacion: {{ publication.title }} </h2>
 
+{% if coments %}
+
+    <div>
+        <h2 class="texto2">Comentarios de la publicacion: {{ publication.title }} </h2>
+    </div>
 
     {% for coment in coments %}
-    {% if coment.parent_id == null %}
+        {% if coment.parent_id == null %}
 
-        <p> {{ coment.author.name }} dice : {{ coment.text }} </p> 
-        {% for response in coment.responses.all %}
-                <p id="respuesta" class="respuesta"> {{ response.author.name }} Responde : {{ response.text }} </p>
-        {% endfor %}
+            <div class="texto1">
 
-        {% if request.user == publication.user %}
-            <form method="POST" action="{% url 'make_response' coment.id %}">
-                {% csrf_token %}
-                {{ form }}
-             <button type="submit">Responder Comentario</button>
-            </form>
+                    <p> {{ coment.author.name }} dice : {{ coment.text }} </p>
+
+            {% for response in coment.responses.all %}
+                    <p id="respuesta" class="respuesta"> {{ response.author.name }} Responde : {{ response.text }} </p>
+            {% endfor %}
+
+            {% if request.user == publication.user %}
+                <form method="POST" action="{% url 'make_response' coment.id %}">
+                    {% csrf_token %}
+                    {{ form }}
+                <button type="submit" class="boton2">Responder Comentario</button>
+                </form>
+            {% endif %}
+            </div>
+            
+
         {% endif %}
-    {% endif %}
+
     {% endfor %}
+
 {% else %}
-    <p>No hay comentarios</p>
+    <p class="alerta1">No hay comentarios</p>
 {% endif %}
 
 {% endblock %}

@@ -264,7 +264,8 @@ def admin_posts(request):
 
         return render(request, 'admin-show-posts.html', {
             'posts': posts,
-            'msg': message
+            'msg': message,
+            'nombre_usuario': request.user.name,
         })
     else:
         posts = Publication.objects.all()

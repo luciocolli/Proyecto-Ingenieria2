@@ -6,6 +6,32 @@
     <link rel="stylesheet" href="../static/miperfil.css">
 </head>
 
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #000; /* color de texto negro */
+        margin: 0;
+        padding: 0;
+    }
+
+    button {
+        color: #fff; 
+        background-color: #abb444; 
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none;
+        margin: 2px 2px;
+    }
+    
+    button:hover {
+        background-color: #92b268;
+    }
+
+</style>
 
 {% extends 'base.html' %}
 
@@ -41,7 +67,7 @@
             </div>
 
             <div>
-                <div class="divFormulario">
+                <div>
                     <form method="GET" action="{% url 'my-posts' %}">
                         <button type="submit">Ver Publicaciones</button>
                     </form>
@@ -59,7 +85,7 @@
                 <div class="divEditar">
                     <a href="{%url 'add-card'%}"><button>Agregar Tarjeta</button></a>
                 </div>
-                <div class="divFormulario">
+                <div>
                     <form method="GET" action="{% url 'my-cards' %}">
                         <button type="submit">Ver mis Tarjetas</button>
                     </form>

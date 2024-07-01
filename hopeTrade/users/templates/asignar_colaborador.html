@@ -4,44 +4,58 @@
 
 {% block content %}
 
-    <h1>Asignar Colaborador</h1>
+    <div>
+       <h1 class="texto2">Asignar Colaborador</h1> 
+    </div>
 
-    <h2>Lista de Usuarios</h1>
-    {% if msg %}
-        <div>{{ msg }}</div>
-    {% endif %}
+    <div>
+        {% if msg %}
+            <div class="alerta1 alert-{{ message.tags }}">{{ msg }}</div>
+        {% endif %}  
+    </div>
     
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Dni</th>
-                <th>Rol</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.name }}</td>
-                <td>{{ user.surname }}</td>
-                <td>{{ user.dni }}</td>
-                <td>{{ user.rol }}</td>
-                <td>
-                    <form action="{% url 'change-rol' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="dni" value="{{ user.dni }}">
-                        <button type="submit" >Asignar Colaborador</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="texto3">
+        <h2>Lista de Usuarios</h1>
 
-    <form action="{% url 'delete-users' %}" method="POST">
-        {% csrf_token %}
-        <button>Eliminar Usuarios</button>
-    </form>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Dni</th>
+                        <th>Rol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <div>
+                       <tr>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.surname }}</td>
+                            <td>{{ user.dni }}</td>
+                            <td>{{ user.rol }}</td>
+                            <td>
+                                <form action="{% url 'change-rol' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="dni" value="{{ user.dni }}">
+                                    <button type="submit" class="boton3">Asignar Colaborador</button>
+                                </form>
+                            </td>
+                        </tr> 
+                    </div>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div>
+                <form action="{% url 'delete-users' %}" method="POST">
+                    {% csrf_token %}
+                    <button class="boton3">Eliminar Usuarios</button>
+                </form>
+            </div>
+    </div>
+    
+    
 
 {% endblock %}

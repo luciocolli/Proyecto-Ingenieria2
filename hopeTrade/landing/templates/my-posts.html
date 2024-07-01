@@ -5,32 +5,37 @@
 
 {% block content %}
     {% csrf_token %}
-    <h1>Mis Publicaciones</h1>
-
-    {% if msg %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ msg }}
+    <div>
+        <h1 class="texto2">Mis Publicaciones</h1>
     </div>
-    {% endif %}
+    
+    <div>
+        {% if msg %}
+        <div class="alerta1 alert-{{ message.tags }}">
+            {{ msg }}
+        </div>
+        {% endif %}
+    </div>
+    
 
     {% for post in myPosts %}
-        <div>
+        <div class="texto1">
             <h2>{{ post.title }}</h2>
             <form method="GET" action="{% url 'view-my-post' post.id %}">
-                <button type="submit">Ver Mi Publicacion</button>
+                <button type="submit" class="boton3">Ver Mi Publicacion</button>
             </form>
 
             <form method="POST" action="{% url 'user_delete_post' post.id %}">
                 {% csrf_token %}
-                <button type="submit">Eliminar Publicacion</button>
+                <button type="submit" class="boton3">Eliminar Publicacion</button>
             </form>
 
             <form method="GET" action="{% url 'edit-publication' post.id %}">
-                <button type="submit">Editar Mi Publicación</button>
+                <button type="submit" class="boton3">Editar Mi Publicación</button>
             </form>
             <form method="GET" action="{% url 'show_my_offers' post.id %}">
                 <!--<input type="hidden" name="title" value="{{ post.title }}">-->
-                <button type="submit">Ver Ofertas</button>
+                <button type="submit" class="boton3">Ver Ofertas</button>
             </form>
             
         </div>

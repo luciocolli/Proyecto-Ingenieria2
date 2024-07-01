@@ -5,14 +5,31 @@
 {% block content %}
 
     {% csrf_token %}
-
-    <h1>Perfil de {{ name }}</h1>
-    <p>Nombre: {{ name }}  {{ surname }}</p>
-    <p>Email: {{ email }}</p>
-    <p>Calificación: {{ calification }}</p>
+    <div>
+        <h1 class="texto2">Perfil de {{ name }}</h1>
+    </div>
+    
+    <div class="texto1">
+        <p>Nombre: {{ name }}  {{ surname }}</p>
+        <p>Email: {{ email }}</p>
+        <p>Calificación: {{ calification }}</p>
+    </div>
+    
     <br>
-    <a href="{% url 'user-posts' id %}"><button>Ver Publicaciones</button></a>  
-    <a href="#"><button>Ver Intercambios</button></a>  <!--{% url 'user-exchanges' %}-->
-    <a href="{% url 'user-ratings' id=id %}"><button>Ver Calificaciones</button></a>
+    <div class="texto1">
+        <div>
+            <a href="{% url 'user-posts' id %}" ><button class="boton2">Ver Publicaciones</button></a>
+        </div>
+            
+        <div>
+            <a href="#"><button class="boton2">Ver Intercambios</button></a>  <!--{% url 'user-exchanges' %}-->
+        </div>
+
+        <div>
+            <a href="{% url 'user-ratings' id=id %}"><button class="boton2">Ver Calificaciones</button></a>
+        </div>
+
+    </div>
+    
 
 {% endblock %}

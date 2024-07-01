@@ -4,18 +4,24 @@
 
 {% block content %}
 
-    {% if msg %}
-        <div>   
-            {{msg}}
-        </div>
-    {% endif %}
+    <div class ="texto2">
+        <h2>Realizar donacion</h2>
+    </div>
+    
 
-    <form method="POST">
+    <div>
+       {% if msg %}
+            <div class="alerta1 alert-{{ message.tags }}">   
+                {{msg}}
+            </div>
+        {% endif %} 
+    </div>
+    
+
+    <form method="POST" class="texto1">
         {% csrf_token %}
         {{form}}
-        <button>
-            Realizar Donacion
-        </button>
+        <button class="boton2">Realizar Donacion</button>
     </form>
 
 {% endblock %}
