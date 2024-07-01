@@ -26,7 +26,7 @@
                 {% for intercambio in intercambios %}
                     <tr>
                         <td>{{ intercambio.date }}</td>
-                        <td>{{ intercambio.post.user.name }} y {{ intercambio.offerOwner.name }}</td>
+                        <td>{{ intercambio.post.user.name }} (dni: {{ intercambio.post.user.dni }}) y {{ intercambio.offerOwner.name }} (dni: {{ intercambio.offerOwner.dni }})</td>
                         <td>Se intercambio: {{ intercambio.post.description }} por {{ intercambio.offer.description }} </td>
                     </tr>
                 {% endfor %}

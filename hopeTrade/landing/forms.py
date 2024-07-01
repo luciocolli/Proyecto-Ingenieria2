@@ -151,3 +151,21 @@ class calificationForm(forms.Form):
         ],
         widget=forms.RadioSelect,
     )
+
+class DeclineForm(forms.Form):
+    def __init__(self, user1, user2, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user1 = user1
+        self.user2 = user2
+
+        choices = [
+            ('user1', f'Faltó el usuario {user1.name}'),
+            ('user2', f'Faltó el usuario {user2.name}'),
+            ('ambos', f'Faltaron ambos usuarios ({user1.name} y {user2.name})'),
+        ]
+
+        self.fields['motivo'] = forms.ChoiceField(
+            label='Motivo',
+            choices=choices,
+            widget=forms.Select()
+        )

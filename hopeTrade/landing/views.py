@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Publication, Offer, CashDonation, Coment, Intercambio, ArticleDonation, Calification, TransferDonation
 from django.db import IntegrityError
 from users.models import User, Card
-from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer, articleRegisterForm, calificationForm
+from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer, articleRegisterForm, calificationForm, DeclineForm
 from django.contrib.auth.decorators import login_required, admin_required
 from users.views import editarPerfil #Sin uso era para ver si se solucionaba
 from django.contrib import messages
@@ -593,6 +593,29 @@ def confirm_intercambio(request, id):
        # back.enviarMail(user1.mail,'Calificar Intercambio', f'Hola {user1.name} nos gustaria que nos dejes tu reseña con una calificacion sobre el intercambio. Entra aqui: <a href="URL_DE_TU_SITIO_PARA_CALIFICAR">Calificar Intercambio</a> ')
        # back.enviarMail(user2.mail,'Calificar Intercambio', f'Hola {user2.name} nos gustaria que nos dejes tu reseña con una calificacion sobre el intercambio ')
     
+def form_decline_intercambio(request, id):
+    if request.method == 'GET':
+        intercambio = Intercambio.objects.filter(id=id)
+        user1 = intercambio.post.user
+        user2 = intercambio.offerOwner
+        return render(request, 'form-decline-intercambio.html', {
+            'form': DeclineForm(user1, user2)
+        })
+    else:
+        intercambio = Intercambio.objects.filter(id=id)
+        url = 'http://127.0.0.1:8000/calificar-intercambio'
+        form = DeclineForm(request.POST)
+        if form.is_valid() :
+            motivo = request.POST['motivo']
+            if motivo == 'user1':
+                back.enviarMail(user2.mail, 'Calificar Usuario', f'Hola {user2.name}, ya que el usuario {user1.name} {user1.surname} no se presento al intercambio nos gustaria que lo califiques aqui: {url}/{id}')
+            elif motivo == 'user2':
+                back.enviarMail(user1.mail, 'Calificar Usuario', f'Hola {user1.name}, ya que el usuario {user2.name} {user2.surname} no se presento al intercambio nos gustaria que lo califiques aqui: {url}/{id}')
+
+            intercambio.post.isHide = False
+            Intercambio.objects.delete(id=id)
+            
+            return render(request, 'show-intercambios-dia.html')
 
 
 
@@ -692,7 +715,7 @@ def show_transfers(request):
     
 def show_all_intercambios(request):
     if request.method == 'GET':
-        intercambios = Intercambio.objects.filter(isDone = True) # agarro los intercambios realizados
+        intercambios = Intercambio.objects.filter(isDone = False) # agarro los intercambios realizados
 
         if not intercambios:
             message = 'Aun no se han realizado intercambios.'
