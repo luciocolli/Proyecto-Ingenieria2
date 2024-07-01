@@ -28,6 +28,7 @@ class Intercambio(models.Model):
     offerOwner = models.ForeignKey(User, on_delete= models.DO_NOTHING)
     date = models.DateField(null=True, blank = True)
     isDone = models.BooleanField(default = False)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, null=True)
 
 class CashDonation(models.Model):
     cash = models.DecimalField(max_digits=10, decimal_places=2)

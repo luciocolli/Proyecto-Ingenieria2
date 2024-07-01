@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Publication, Offer, CashDonation, Coment, Intercambio, ArticleDonation, Calification
+from .models import Publication, Offer, CashDonation, Coment, Intercambio, ArticleDonation, Calification, TransferDonation
 from django.db import IntegrityError
 from users.models import User, Card
 from .forms import CreateNewPublication, EditPublicationForm, cashRegisterForm, ComentPublicationForm, CreateNewOffer, articleRegisterForm, calificationForm
@@ -478,7 +478,8 @@ def accept_offer(request,id):
             Intercambio.objects.create(
                 date=offer.date,
                 offerOwner=offer.user,
-                post=post_offer
+                post=post_offer,
+                offer = offer
             )
 
             post_offer.isHide = True
@@ -671,3 +672,35 @@ def delete_card(request, id):
             'myCards' : myCards,
             'msg': message
         })
+    
+
+def show_transfers(request):
+    if request.method == 'GET':
+        transfers = TransferDonation.objects.all()
+
+        if not transfers:
+            message = 'No se recibieron donaciones por transferencia.'
+        else:
+            message = None
+            totalAmount = TransferDonation.objects.aggregate(total= Sum('amount'))['total']
+        
+        return render(request, 'show-transfers.html',{
+            'transfers': transfers,
+            'total_amount': totalAmount,
+            'msg': message
+        })
+    
+def show_all_intercambios(request):
+    if request.method == 'GET':
+        intercambios = Intercambio.objects.filter(isDone = True) # agarro los intercambios realizados
+
+        if not intercambios:
+            message = 'Aun no se han realizado intercambios.'
+        else:
+            message = None
+
+        return render(request, 'show-all-intercambios.html', {
+            'intercambios': intercambios,
+            'msg': message
+        })
+    

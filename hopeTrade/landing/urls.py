@@ -33,4 +33,6 @@ urlpatterns = [
     path('calificar-intercambio/<int:id>', views.calificar_intercambio, name='calificar-intercambio'),
     path('my-cards', views.show_my_cards, name='my-cards'),
     path('delete-card/<int:id>', views.delete_card, name='delete-card'),
+    path('show_transfers', views.show_transfers, name='show_transfers'),
+    path('show_all_intercambios', views.show_all_intercambios, name='show_all_intercambios'), #todos los intercambios que se realizaron
 ]

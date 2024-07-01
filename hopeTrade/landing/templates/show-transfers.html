@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>Donaciones de Transferencia</h1>
+
+    {% if msg %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ msg }}
+        </div>
+    {% endif %}
+
+    {% if transfers %}
+        <table style="border-collapse: separate; border-spacing: 20px;">
+            <thead>
+                <tr>
+                    <th>Importe</th>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Dni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transfer in transfers %}
+                    <tr>
+                        <td>{{ transfer.amount }}</td>
+                        <td>{{ transfer.date }}</td>
+                        <td>{{ transfer.name }}</td>
+                        <td>{{ transfer.surname}}</td>
+                        <td>{{ transfer.dniDonor }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <p>El total donado es: $ {{ total_amount }}</p>
+
+{% endblock %}
