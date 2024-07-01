@@ -5,75 +5,24 @@
 
 {% block content %}
 
-    <style>
-        .formulario {
-            color: #23303d; /* Cambia el color según tus necesidades */
-            font-family: Arial, Helvetica, sans-serif; /* Ajusta la fuente si es necesario */
-            background-color: #d4d5d6; /* Fondo claro */
-            border-radius: 5px; /* Bordes redondeados */
-            padding: 10px; /* Ajusta el relleno según sea necesario */
-            margin: 10px 0; /* Margen superior e inferior */
-            display: inline-block; /* Asegura que el botón se ajuste al contenido */
-        }
-
-        .titulo {
-            color: #fff; /* color de texto blanco */
-            background-color: #abb444;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .button {
-            color: #fff; /* color de texto blanco */
-            background-color: #abb444;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #92b268;
-        }
-
-        .alert {
-            color: #e8e8e7;
-            font-family: Arial, Helvetica, sans-serif;
-            text-decoration: none;
-            padding: 5px 10px; /* Ajusta el padding para el tamaño del botón */
-            border-radius: 5px;
-            background-color: #505f6d;
-            margin: 5px 0;
-            display: inline-block;
-        }
-
-        
-    </style>
-
     <div>
-        <h2 class="titulo">Calificar intercambio de: {{intercambio}}</h2>
+        <h2 class="titulo1">Calificar intercambio de: {{intercambio}}</h2>
     </div>
     
     <div>
 
-        <form method="POST" class ="formulario" >
+        <form method="POST" class ="texto2" >
             {% csrf_token %}
             {{form}}
-            <button class ="button">
+            <button class ="boton2">
                 Calificar
             </button>
         </form>
 
     </div>
-    
-
 
     {% if msg %}
-    <div class="alert alert-info">
+    <div class="alerta1 alert-info">
         {{ msg }}
     </div>
     {% endif %}
