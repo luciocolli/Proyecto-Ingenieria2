@@ -4,23 +4,30 @@
 
 {% block content %}
     {% csrf_token %}
-    <h1> Publicaciones de {{ name }}</h1>
+
+    <div>
+        <h1 class="texto2"> Publicaciones de {{ name }}</h1>
+    </div>
 
     {% if msg %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ msg }}
+    <div>
+        <div class="alert alert-{{ message.tags }}">
+            {{ msg }}
+        </div>
     </div>
     {% endif %}
 
     {% for post in posts %}
 
     <div>
-        <h2> {{ post.title }} </h2>
-    
-        <p>Usuario: {{ post.user.name }}</p>
-        <form method="GET" action="{% url 'post' post.id %}">
-            <button type="submit">Ver Publicacion</button> <!-- Antes decia Ver Usuario -->
-        </form> 
+        <div class="texto1">
+            <h2> {{ post.title }} </h2>
+            <p>Usuario: {{ post.user.name }}</p>
+            <form method="GET" action="{% url 'post' post.id %}">
+                <button type="submit" class="boton2">Ver Publicacion</button> <!-- Antes decia Ver Usuario -->
+            </form>
+        </div>
+         
     </div>
     
     {% endfor %}

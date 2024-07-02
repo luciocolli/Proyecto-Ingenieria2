@@ -2,24 +2,25 @@
 
 {% extends 'base.html' %}
 
-
 {% block content %}
-
-    <h1>Oferta</h1>
-
-    {% if message != None %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
+    <div>
+        <h1 class="texto2">Oferta</h1>
     </div>
-    {% endif %}
-
-    <form method="POST">
+    
+    <div>
+        {% if message != None %}
+        <div class="alerta1 alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endif %}
+    </div>
+    
+    <form method="POST" class="texto1">
         {% csrf_token %}
         {{form}}
-        <button>
+        <button class="boton2">
             Realizar Oferta
         </button>
     </form>
-
 
 {% endblock %}

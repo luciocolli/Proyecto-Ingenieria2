@@ -149,7 +149,7 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
-@admin_required
+#@admin_required
 def view_asignar_colaborador(request):
   
     if request.method == 'GET':

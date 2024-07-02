@@ -6,6 +6,32 @@
     <link rel="stylesheet" href="../static/miperfil.css">
 </head>
 
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #000; /* color de texto negro */
+        margin: 0;
+        padding: 0;
+    }
+
+    button {
+        color: #fff; 
+        background-color: #abb444; 
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none;
+        margin: 2px 2px;
+    }
+    
+    button:hover {
+        background-color: #92b268;
+    }
+
+</style>
 
 {% extends 'base.html' %}
 
@@ -14,49 +40,57 @@
     {% csrf_token %}
     <h1>Mi perfil</h1>
     <div class="containerGeneral">
-            <label>Nombre:</label>
-            <span>{{ name }}</span>
-        
-        
-            <label>Apellido:</label>
-            <span>{{ surname }}</span>
-        
-            <label>Email:</label>
-            <span>{{ mail }}</span>
-       
-            <label>DNI:</label>
-            <span>{{ dni }}</span>
-        
-            <label>Fecha:</label>
-            <span>{{ date }}</span>
 
+            <div class="texto2">
+                <label>Nombre:</label>
+                <span>{{ name }}</span>
+            </div>
+            
+            <div class="texto2">
+                <label>Apellido:</label>
+                <span>{{ surname }}</span>
+            </div>
+            
+            <div class="texto2">
+                <label>Email:</label>
+                <span>{{ mail }}</span>
+            </div>
 
-            <div class="divFormulario">
-                <form method="GET" action="{% url 'my-posts' %}">
-                    <button type="submit">Ver Publicaciones</button>
-                </form>
+            <div class="texto2">
+                <label>DNI:</label>
+                <span>{{ dni }}</span>
             </div>
-            <div class="divEditar">
-                <a href="{% url 'editar-perfil' %}"><button>Editar Perfil</button></a>
+            
+            <div class="texto2">
+                <label>Fecha:</label>
+                <span>{{ date }}</span>
             </div>
-            <div class="divEditar">
-                <a href="#"><button>Ver Intercambios</button></a>
-            </div>
-            <a href="{% url 'user-ratings' id=user.id %}" class="btn btn-primary"><button>Ver Calificaciones</button></a>
-            <div class="divEditar">
-                <a href="{%url 'offers'%}"><button>Ver mis ofertas</button></a>
-            </div>
-            <div class="divEditar">
-                <a href="{%url 'add-card'%}"><button>Agregar Tarjeta</button></a>
-            </div>
-            <div class="divFormulario">
-                <form method="GET" action="{% url 'my-cards' %}">
-                    <button type="submit">Ver mis Tarjetas</button>
-                </form>
+
+            <div>
+                <div>
+                    <form method="GET" action="{% url 'my-posts' %}">
+                        <button type="submit">Ver Publicaciones</button>
+                    </form>
+                </div>
+                <div class="divEditar">
+                    <a href="{% url 'editar-perfil' %}"><button>Editar Perfil</button></a>
+                </div>
+                <div class="divEditar">
+                    <a href="#"><button>Ver Intercambios</button></a>
+                </div>
+                <a href="{% url 'user-ratings' id=user.id %}" class="btn btn-primary"><button>Ver Calificaciones</button></a>
+                <div class="divEditar">
+                    <a href="{%url 'offers'%}"><button>Ver mis ofertas</button></a>
+                </div>
+                <div class="divEditar">
+                    <a href="{%url 'add-card'%}"><button>Agregar Tarjeta</button></a>
+                </div>
+                <div>
+                    <form method="GET" action="{% url 'my-cards' %}">
+                        <button type="submit">Ver mis Tarjetas</button>
+                    </form>
+                </div>
             </div>
     </div>
     
-   
-
-
 {% endblock %}

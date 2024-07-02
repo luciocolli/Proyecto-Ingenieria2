@@ -4,16 +4,24 @@
 
 
 {% block content %}
-    <h1>Intercambios pendientes del dia</h1>
 
-    {% if msg %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ msg }}
-        </div>
-    {% endif %}
+    <div>
+        <h1 class="texto2">Intercambios pendientes del dia</h1>
+    </div>
     
+
+    <div>
+       {% if msg %}
+            <div class="alerta1 alert-{{ message.tags }}">
+                {{ msg }}
+            </div>
+        {% endif %} 
+    </div>
+    
+    
+
     {% for intercambio in intercambios %}
-        <div>
+        <div class="texto1">
             <h2> {{intercambio.post.title}} </h2>
             <p>Participantes:</p> 
             <p> {{intercambio.post.user.name}}. Dni: {{intercambio.post.user.dni}} </p>
@@ -21,11 +29,11 @@
 
             <form action="{% url 'confirm_intercambio' intercambio.id %}" method="POST">
                 {% csrf_token %}
-                <button>Confirmar Intercambio</button>
+                <button class="boton3">Confirmar Intercambio</button>
             </form>
             <form action="{% url 'form_decline_intercambio' intercambio.id %}" method="POST">
                 {% csrf_token %}
-                <button>Eliminar Intercambio</button>
+                <button class="boton3">Eliminar Intercambio</button>
             </form>
 
         </div>

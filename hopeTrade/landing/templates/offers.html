@@ -5,18 +5,27 @@
 {% block content %}
 
 {% csrf_token %}
-    <h1> Mis ofertas</h1>
-    {% if msg %}
-        <div class="alert alert-{{ message.tags }}">
-        {{ msg }}
-    {% endif %}
-
+    <div>
+       <h1 class="texto2"> Mis ofertas</h1> 
+    </div>
+    
+    <div>
+        {% if msg %}
+            <div class="alerta1 alert-{{ message.tags }}">
+            {{ msg }}
+            </div>
+        {% endif %}
+    </div>
+        
     {% for offer in myOffers %}
-        <h2> <h2>{{ offer.post.title }}</h2></h2>
-        <form method="POST" action="{% url 'cancel_offer' offer.id %}">
-            {% csrf_token %}
-            <button type="submit">Cancelar oferta</button>
-        </form>
+        <div class="texto2">
+            <h2>{{ offer.post.title }}</h2>
+            <form method="POST" action="{% url 'cancel_offer' offer.id %}">
+                {% csrf_token %}
+                <button type="submit" class="boton2">Cancelar oferta</button>
+            </form>
+        </div>
+        
     {% endfor %}
         
 {% endblock %}

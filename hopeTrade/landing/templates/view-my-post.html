@@ -5,37 +5,45 @@
 
 {% block content %}
 {% csrf_token %}
-    <h2> {{ title }}</h2>
+    <h2 class="texto2"> {{ title }}</h2>
 
     <div class="post">
+
         <div class="info-publicacion">
-            <div>
-                <label>Descripción:</label> 
+
+            <div class="texto1">
+                <label >Descripción:</label> 
                 <span>{{ description }}</span>
-            </div>
-            <div>
+            </div> 
+
+            <div class="texto1">
                 <label>Estado:</label> 
                 <span>{{ state }}</span>
             </div>
-            <div>
+
+            <div class="texto1">
                 <label>Categoría:</label> 
                 <span>{{ category }}</span>
             </div>
-            <div>
-                {% if date != null %}
+
+            {% if date != null %}
+                <div class="texto1">
                     <label>Fecha de Vencimiento:</label> 
                     <span>{{ date }}</span>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
+
             <div>
                 <img src="{% static file  %}", width="350">
             </div>
+
             <form method="GET" action="{% url 'view_coments' %}">
                 <input type="hidden" name="id" value="{{ id }}">
-                <button type="submit">Ver comentarios</button>
+                <button type="submit" class="boton3">Ver comentarios</button>
             </form>
+
         </div>
+
     </div>
-    
 
 {% endblock %}

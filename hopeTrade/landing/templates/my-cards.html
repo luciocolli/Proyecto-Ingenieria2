@@ -5,20 +5,23 @@
 
 {% block content %}
     {% csrf_token %}
-    <h1>Mis Tarjetas</h1>
+    <div>
+        <h1 class="texto2">Mis Tarjetas</h1>
+    </div>
+    
 
     {% if msg %}
-    <div class="alert alert-{{ message.tags }}">
+    <div class="alerta1 alert-{{ message.tags }}">
         {{ msg }}
     </div>
     {% endif %}
     <ul>
         {% for card in myCards %}
-            <li>
+            <li class="texto1">
                 <span>{{ card.number }}</span>
                 <form method="POST" action="{% url 'delete-card' card.id %}" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit">Eliminar Tarjeta</button>
+                    <button type="submit" class="boton2">Eliminar Tarjeta</button>
                 </form>
             </li>
         {% endfor %}

@@ -4,9 +4,12 @@
 
 {% block content %}
 
+    <div class ="texto2">
+        <h2>Editar Perfil</h2>
+    </div>
+
     <div class="container">
-        <h1>Editar Perfil</h1>
-        
+
         {% if messages %}
             <div class="messages">
                 <ul>
@@ -17,33 +20,64 @@
             </div>
         {% endif %}
         
-        <form method="POST">
+        <form method="POST" class="texto1">
+
             {% csrf_token %}
+
             <div>
-                <label for="name">Nombre:</label>
-                <input required type="text" id="name" name="name" value="{{ user.name }}">
+                <div class="texto3">
+                    <div class="texto3">
+                        <label for="name">Nombre:</label>
+                        <input required type="text" id="name" name="name" value="{{ user.name }}">
+                    </div>
+                </div>
             </div>
+
             <div>
-                <label for="surname">Apellido:</label>
-                <input required type="text" id="surname" name="surname" value="{{ user.surname }}">
+                <div class="texto3">
+                    <div class="texto3">
+                        <label for="surname">Apellido:</label>
+                        <input required type="text" id="surname" name="surname" value="{{ user.surname }}">
+                    </div>
+                </div>
             </div>
+
             <div>
-                <label for="date">Fecha:</label>
-                <input required type="date" id="date" name="date" value="{{ user.date|date:'Y-m-d' }}">
+                <div class="texto3">
+                    <div class="texto3">
+                        <label for="date">Fecha:</label>
+                        <input required type="date" id="date" name="date" value="{{ user.date|date:'Y-m-d' }}">
+                    </div>
+                </div>
             </div>
+
             <div>
-                <label for="mail">Email:</label>
-                <input required type="email" id="mail" name="mail" value="{{ user.mail }}">
+                <div class="texto3">
+                    <div class="texto3">
+                        <label for="mail">Email:</label>
+                        <input required type="email" id="mail" name="mail" value="{{ user.mail }}">
+                    </div>
+                </div>
             </div>
+
             <div>
-                <label for="password_actual">Contraseña actual:</label>
-                <input type="password" id="password_actual" name="password_actual">
+                <div class="texto3">
+                    <div class="texto3">
+                        <label for="password_actual">Contraseña actual:</label>
+                        <input type="password" id="password_actual" name="password_actual">
+                    </div>
+                </div>
             </div>
+
             <div>
-                <label for="nueva_password">Nueva contraseña:</label>
-                <input type="password" id="nueva_password" name="nueva_password">
+                <div class="texto3">
+                    <div class="texto3">
+                        <label for="nueva_password">Nueva contraseña:</label>
+                        <input type="password" id="nueva_password" name="nueva_password">
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <button type="submit" class="boton2">Guardar cambios</button>
         </form>
     </div>
 

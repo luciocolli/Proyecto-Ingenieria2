@@ -4,6 +4,7 @@
 
 
 {% block content %}
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -20,18 +21,19 @@
     });
     </script>
 
-    <h1>Donaciones</h1>
-    
-    <a href="{% url 'cash_register' %}"><button>Registrar donacion en efectivo</button></a>
-    <a href="{% url 'article_register' %}"><button>Registrar donacion de Articulo</button></a>
-    <button id="indice1">Listar donaciones en Efectivo</button>
-    <a href="{% url 'show_transfers' %}"><button>Listar donaciones en Transferencia</button></a>
-    <a href="{% url 'show_all_intercambios' %}"><button>Ver Intercambios</button></a>
+    <div>
+        <h1 class="texto2">Donaciones</h1>
+    </div>
+
+    <a href="{% url 'cash_register' %}" class="boton2">Registrar donacion en efectivo</a>
+    <a href="{% url 'article_register' %}" class="boton2">Registrar donacion de Articulo</a>
+    <button id="indice1" class="boton2">Listar donaciones en Efectivo</button>
     <!-- <button id="indice2">Listar donaciones de Articulos</button> CAMBIO ESTE BOTON PARA LISTAR ARTICULOS DONADOS -->
-    <a href="{% url 'show_articles' %}"><button>Listar donaciones de Articulos</button></a>
+    <a href="{% url 'show_articles' %}" class="boton2">Listar donaciones de Articulos</a>
     <div id="caja1" class="caja" style="display: none;">
+
         {% if donations %}
-            <table>
+            <table class ="texto1">
                 <thead>
                     <tr>
                         <th>Importe</th>
@@ -53,9 +55,15 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <p> El monto total reunido es: ${{ total_donations }} </p>
+
+            <div>
+                <p class="texto1"> El monto total reunido es: ${{ total_donations }} </p>                
+            </div>
+
         {% else %}
-            <h3>No hay donaciones en efectivo registradas</h3>
+            <div>
+                <h3>No hay donaciones en efectivo registradas</h3>                
+            </div>
         {% endif %}
     </div>
     <div id="caja2" class="caja" style="display: none;">

@@ -3,27 +3,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Ofertas de {{ title }} </h1>
-
+    <div>
+        <h1 class="texto2">Ofertas de {{ title }} </h1>
+    </div>
+    
     {% if msg %}
-    <div class="alert alert-info">
+    <div class="alerta1 alert-info">
         {{ msg }}
     </div>
     {% endif %}
 
     {% for offer in myOffers %}
-        <div>
+        <div class="texto1">
             <h2>{{ offer.user.name }} {{ offer.user.surname }}</h2>
             <p>{{ offer.description }}</p>
             
             <form method="POST" action="{% url 'accept_offer' offer.id %}">
                 {% csrf_token %}
-                <button type="submit">Aceptar oferta</button>
+                <button type="submit" class="boton3">Aceptar oferta</button>
             </form>
 
             <form method="POST" action="{% url 'decline_offer' offer.id %}">
                 {% csrf_token %}
-                <button type="submit">Rechazar oferta</button>
+                <button type="submit" class="boton3">Rechazar oferta</button>
             </form>
         </div>
     {% endfor %}
