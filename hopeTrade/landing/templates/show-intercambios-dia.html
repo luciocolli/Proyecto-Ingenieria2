@@ -31,7 +31,7 @@
                 {% csrf_token %}
                 <button class="boton3">Confirmar Intercambio</button>
             </form>
-            <form action="{% url 'form_decline_intercambio' intercambio.id %}" method="POST">
+            <form action="{% url 'form_decline_intercambio' intercambio.id %}" method="GET">
                 {% csrf_token %}
                 <button class="boton3">Eliminar Intercambio</button>
             </form>

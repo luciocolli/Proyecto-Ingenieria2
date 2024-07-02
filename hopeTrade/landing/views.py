@@ -132,13 +132,13 @@ def show_all_posts(request):
 
         if categories:
             # Filtrar publicaciones por categorías seleccionadas
-            posts = posts.filter(category__in=categories)
+            posts = posts.filter(category__in=categories, isHide = False)
 
         if search:
             # Filtrar publicaciones por título
             search_words = search.split()
             for word in search_words:
-                posts = posts.filter(title__icontains=word)
+                posts = posts.filter(title__icontains=word, isHide = False)
 
         # Mensaje de resultados
         if not posts:
@@ -194,7 +194,7 @@ def show_post(request, id):
 def show_my_posts(request): # Para ver listado de mis publicaciones
     if request.method == 'GET':
         logged_user = request.user
-        myPosts = Publication.objects.filter(user=logged_user)
+        myPosts = Publication.objects.filter(user=logged_user, isHide = False)
 
         if not myPosts:
             message = 'No hay publicaciones disponibles'
@@ -228,7 +228,7 @@ def admin_posts(request):
 
         if categories:
             # Filtrar publicaciones por categorías seleccionadas
-            posts = Publication.objects.filter(category__in=categories) 
+            posts = Publication.objects.filter(category__in=categories, isHide = False) 
             if not posts:
                 # Si no hay publicaciones para las categorías seleccionadas, mostrar mensaje
                 message = f'No hay publicaciones disponibles para la(s) categoría(s): {", ".join(categories)}'
@@ -236,7 +236,7 @@ def admin_posts(request):
                 message = None
         else:
             # Mostrar todas las publicaciones (excepto las del usuario)
-            posts = Publication.objects.all()
+            posts = Publication.objects.filter(isHide = False).all()
             if not posts:
                 # Si no hay publicaciones en el sistema, mostrar mensaje
                 message = 'No hay publicaciones disponibles'
@@ -247,7 +247,7 @@ def admin_posts(request):
             # Filtrar publicaciones por título
             search_words = search.split()
             for word in search_words:
-                posts = posts.filter(title__icontains=word)
+                posts = posts.filter(title__icontains=word, isHide = False)
 
         # Mensaje de resultados
         if not posts:
@@ -560,7 +560,7 @@ def show_articles(request):
 def show_intercambios_today(request):
     if request.method == 'GET':
         today = datetime.now().date()
-        intercambios = Intercambio.objects.filter(isDone = False, date = today) # chequear
+        intercambios = Intercambio.objects.filter(isDone = False, isHide = False, date = today) # chequear
 
         if not intercambios :
             message = 'No hay intercambios pendientes en el dia de la fecha.'
@@ -585,6 +585,8 @@ def confirm_intercambio(request, id):
         user1 = intercambio.post.user
         user2 = intercambio.offerOwner
 
+        intercambio.save()
+
         #back.send_email('http://127.0.0.1:8000/', user1.mail)
         back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{id}')
         back.enviarMail(user2.mail, 'Calificar Intercambio', f'Hola {user2.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{id}')
@@ -596,16 +598,18 @@ def confirm_intercambio(request, id):
     
 def form_decline_intercambio(request, id):
     if request.method == 'GET':
-        intercambio = Intercambio.objects.filter(id=id)
+        intercambio = Intercambio.objects.get(id=id)
         user1 = intercambio.post.user
         user2 = intercambio.offerOwner
         return render(request, 'form-decline-intercambio.html', {
             'form': DeclineForm(user1, user2)
         })
     else:
-        intercambio = Intercambio.objects.filter(id=id)
+        intercambio = Intercambio.objects.get(id=id)
+        user1 = intercambio.post.user
+        user2 = intercambio.offerOwner
         url = 'http://127.0.0.1:8000/calificar-intercambio'
-        form = DeclineForm(request.POST)
+        form = DeclineForm(user1, user2, request.POST)
         if form.is_valid() :
             motivo = request.POST['motivo']
             if motivo == 'user1':
@@ -614,9 +618,10 @@ def form_decline_intercambio(request, id):
                 back.enviarMail(user1.mail, 'Calificar Usuario', f'Hola {user1.name}, ya que el usuario {user2.name} {user2.surname} no se presento al intercambio nos gustaria que lo califiques aqui: {url}/{id}')
 
             intercambio.post.isHide = False
-            Intercambio.objects.delete(id=id)
+            intercambio.isHide = True
+            intercambio.save()
             
-            return render(request, 'show-intercambios-dia.html')
+    return render(request, 'show-intercambios-dia.html')
 
 
 
@@ -716,7 +721,7 @@ def show_transfers(request):
     
 def show_all_intercambios(request):
     if request.method == 'GET':
-        intercambios = Intercambio.objects.filter(isDone = False) # agarro los intercambios realizados
+        intercambios = Intercambio.objects.filter(isDone = True) # agarro los intercambios realizados
 
         if not intercambios:
             message = 'Aun no se han realizado intercambios.'
