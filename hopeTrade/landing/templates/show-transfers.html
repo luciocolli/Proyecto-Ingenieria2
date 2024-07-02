@@ -4,16 +4,22 @@
 
 
 {% block content %}
-    <h1>Donaciones de Transferencia</h1>
+    <div>
+        <h1 class="texto2">Donaciones de Transferencia</h1>
+    </div>
+    
 
     {% if msg %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ msg }}
+        <div>
+            <div class="alerta1 alert-{{ message.tags }}">
+                {{ msg }}
+            </div>
         </div>
+        
     {% endif %}
 
     {% if transfers %}
-        <table style="border-collapse: separate; border-spacing: 20px;">
+        <table style="border-collapse: separate; border-spacing: 20px;" class="texto1">
             <thead>
                 <tr>
                     <th>Importe</th>
@@ -36,6 +42,9 @@
             </tbody>
         </table>
     {% endif %}
-    <p>El total donado es: $ {{ total_amount }}</p>
+    <div>
+        <p class="texto1">El total donado es: $ {{ total_amount }}</p>
+    </div>
+    
 
 {% endblock %}

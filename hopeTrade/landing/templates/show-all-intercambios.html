@@ -4,17 +4,22 @@
 
 
 {% block content %}
-    <h1>Intercambios Realizados</h1>
+    <div>
+        <h1 class="texto2">Intercambios Realizados</h1>
+    </div>
 
     {% if msg %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ msg }}
+        <div>
+            <div class="alerta1 alert-{{ message.tags }}">
+                {{ msg }}
+            </div>
         </div>
+        
     {% endif %}
 
     {% if intercambios %}
 
-        <table  style="border-collapse: separate; border-spacing: 20px;">
+        <table  style="border-collapse: separate; border-spacing: 20px;" class="texto1">
             <thead>
                 <tr>
                     <th>Fecha</th>
