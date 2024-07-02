@@ -22,12 +22,13 @@
         </div>
             
         <div>
-            <a href="#"><button class="boton2">Ver Intercambios</button></a>  <!--{% url 'user-exchanges' %}-->
+            <a href="{% url 'show_user_intercambios' id %}" method="GET"><button class="boton2">Ver Intercambios</button></a> 
         </div>
 
         <div>
             <a href="{% url 'user-ratings' id=id %}"><button class="boton2">Ver Calificaciones</button></a>
         </div>
+
 
     </div>
     

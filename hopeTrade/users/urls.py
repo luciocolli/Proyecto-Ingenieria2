@@ -19,5 +19,6 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('add-card/', views.add_card, name='add-card'),
     path('make-transfer-donation/', views.make_transfer_donation, name='make-donation'),
+    path('show_user_intercambios/<int:id>', views.show_user_intercambios, name='show_user_intercambios')
 ] 
 

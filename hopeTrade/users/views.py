@@ -288,3 +288,28 @@ def make_transfer_donation(request):
             })
 
 
+def show_user_intercambios(request, id):
+    if request.method == 'GET':
+        intercambios_post_user = Intercambio.objects.filter(post__user__id=id)
+        intercambios_offer_owner = Intercambio.objects.filter(offerOwner__id=id)
+        intercambios_done = Intercambio.objects.filter(isDone=True)
+
+        intercambios = list(intercambios_post_user) + list(intercambios_offer_owner) + list(intercambios_done)
+        
+        # Eliminar duplicados
+        intercambios = list(set(intercambios))
+        user = User.objects.get(id=id)
+        
+        if not intercambios:
+            message = 'El usuario no cuenta con intercambios realizados'
+        else:
+            message = None
+
+        print(message)
+        print(intercambios)
+
+        return render(request, 'show-user-intercambios.html',{
+            'intercambios': intercambios,
+            'msg': message,
+            'user': user.name
+        })
