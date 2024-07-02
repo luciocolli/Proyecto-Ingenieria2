@@ -75,9 +75,6 @@
                 <div class="divEditar">
                     <a href="{% url 'editar-perfil' %}"><button>Editar Perfil</button></a>
                 </div>
-                <div class="divEditar">
-                    <a href="#"><button>Ver Intercambios</button></a>
-                </div>
                 <a href="{% url 'user-ratings' id=user.id %}" class="btn btn-primary"><button>Ver Calificaciones</button></a>
                 <div class="divEditar">
                     <a href="{%url 'offers'%}"><button>Ver mis ofertas</button></a>
@@ -89,6 +86,9 @@
                     <form method="GET" action="{% url 'my-cards' %}">
                         <button type="submit">Ver mis Tarjetas</button>
                     </form>
+                </div>
+                <div>
+                    <a href="{% url 'show_user_intercambios' id=user.id %}" method="GET"><button class="boton2">Ver Intercambios</button></a> 
                 </div>
             </div>
     </div>

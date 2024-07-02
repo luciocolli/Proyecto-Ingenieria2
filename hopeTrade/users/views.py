@@ -290,14 +290,10 @@ def make_transfer_donation(request):
 
 def show_user_intercambios(request, id):
     if request.method == 'GET':
-        intercambios_post_user = Intercambio.objects.filter(post__user__id=id)
-        intercambios_offer_owner = Intercambio.objects.filter(offerOwner__id=id)
-        intercambios_done = Intercambio.objects.filter(isDone=True)
+        intercambios = Intercambio.objects.filter(isDone=True).filter(post__user__id=id) | Intercambio.objects.filter(isDone=True).filter(offerOwner__id=id)
 
-        intercambios = list(intercambios_post_user) + list(intercambios_offer_owner) + list(intercambios_done)
-        
-        # Eliminar duplicados
-        intercambios = list(set(intercambios))
+        # Elimina duplicados
+        intercambios = intercambios.distinct()
         user = User.objects.get(id=id)
         
         if not intercambios:

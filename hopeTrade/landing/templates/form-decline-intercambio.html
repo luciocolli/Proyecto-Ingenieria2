@@ -4,15 +4,15 @@
 
 
 {% block content %}
-    <h1>Formulario de Eliminacion de Intercambio</h1>
+    <div>
+        <h1 class="texto1">Formulario de Eliminacion de Intercambio</h1>
+    </div>
 
-    <form method="POST" >
-        {% csrf_token %}
-        {{form}}
-        <button>
-            Confirmar Eliminacion
-        </button>
-    </form>
-
-
+    <div>
+        <form method="POST" class="texto2">
+            {% csrf_token %}
+            {{form}}
+            <button class="boton2">Confirmar Eliminacion</button>
+        </form>
+    </div>
 {% endblock %}

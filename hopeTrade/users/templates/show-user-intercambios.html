@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div>
+        <h1 class="texto2">Intercambios Realizados de {{user}}</h1>
+    </div>
+
+    {% if msg %}
+        <div>
+            <div class="alerta1 alert-{{ message.tags }}">
+                {{ msg }}
+            </div>
+        </div>
+        
+    {% endif %}
+
+    {% if intercambios %}
+
+        <table  style="border-collapse: separate; border-spacing: 20px;" class="texto1">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuarios</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for intercambio in intercambios %}
+                    <tr>
+                        <td>{{ intercambio.date }}</td>
+                        <td>{{ intercambio.post.user.name }} (dni: {{ intercambio.post.user.dni }}) y {{ intercambio.offerOwner.name }} (dni: {{ intercambio.offerOwner.dni }})</td>
+                        <td>Se intercambio: {{ intercambio.post.description }} por {{ intercambio.offer.description }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

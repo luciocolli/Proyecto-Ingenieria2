@@ -452,12 +452,14 @@ def decline_offer(request,id):
         message = 'Oferta rechazada'
         offer = get_object_or_404(Offer, id=id)
         offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        title = offer.post.title
         offer.delete()
 
         back.enviarMail(offer.user.mail,'Oferta rechazada', f'Hola {offer.user.name}, el usuario {offer.post.user.name} {offer.post.user.surname} a rechazado la oferta {offer.title}')
 
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
+            'title': title,
             'msg': message
         })
     
@@ -467,6 +469,7 @@ def accept_offer(request,id):
         offer = get_object_or_404(Offer, id=id)
         offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
         #offer.delete()
+        title = offer.post.title
         
         # chequear que esa publicacion no este en un intercambio creado
         post_offer = Publication.objects.get(id = offer.post_id)
@@ -493,6 +496,7 @@ def accept_offer(request,id):
 
         return render(request, 'view-my-offers.html',{
             'myOffers' : offers,
+            'title': title,
             'msg': message
         })
     
