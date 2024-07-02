@@ -42,7 +42,7 @@ class TransferDonation(forms.Form):
                                             'required': 'Este campo es obligatorio.',
                                             'invalid': 'Ingrese un número de tarjeta válido.'
                             })
-    amount = forms.FloatField(label = 'Monto en pesos',required= True, error_messages={'invalid' : 'Este campo debe contenter solo números'})
+    amount = forms.IntegerField(label = 'Monto en pesos',required= True, error_messages={'invalid' : 'Este campo debe contenter solo números'})
  
 
 '''

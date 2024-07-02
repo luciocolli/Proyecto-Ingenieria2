@@ -41,7 +41,6 @@ class CashDonation(models.Model):
 class TransferDonation(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
-    card = models.ForeignKey(Card, on_delete= models.DO_NOTHING)
     name = models.CharField(max_length = 100, default='Sin Nombre')
     surname = models.CharField(max_length = 100, default='Sin apellido')
     dniDonor = models.CharField(max_length = 100)

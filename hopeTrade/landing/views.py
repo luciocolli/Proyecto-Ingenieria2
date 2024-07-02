@@ -304,6 +304,7 @@ def donation(request):
 
 @login_required
 def cashRegister(request):
+    message = None
     if request.method == 'GET':
         return render(request, 'cashRegister.html', {
             'form': cashRegisterForm()
@@ -318,7 +319,11 @@ def cashRegister(request):
                 surname = request.POST['surname'],
                 dniDonor = request.POST['dniDonor']
             )
-            return redirect('donation')
+            message = 'Donacion realizada con éxito.'
+            return render(request, 'cashRegister.html', {
+            'form': cashRegisterForm(),
+            'msg' : message
+        })
 
 @login_required
 def makeComent(request):

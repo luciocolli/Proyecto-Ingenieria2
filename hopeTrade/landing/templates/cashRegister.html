@@ -17,5 +17,13 @@
         </button>
     </form>
 
+    <div>
+        {% if msg %}
+            <div class="alerta1 alert-{{ message.tags }}">
+                {{ msg }}
+            </div>
+        {% endif %}
+    </div>
+
 
 {% endblock %}

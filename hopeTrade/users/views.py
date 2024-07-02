@@ -126,7 +126,7 @@ def view_ratings(request, id):
         promedio = user_calificaciones.aggregate(Avg('calification'))['calification__avg']
         message = None
         if not user_calificaciones:
-            message = "No posees calificaciones registradas."
+            message = "No hay calificaciones registradas."
 
         # Procesar cada calificación para convertirla en estrellas
         for calificacion in user_calificaciones:
@@ -251,16 +251,18 @@ def add_card(request):
 
 def make_transfer_donation(request):
 
-    def has_founds(card, form):
-        if card.has_funds:
+    def has_founds(card, monto, form):
+        if card.funds >= monto:
             transfer.objects.create(
                 amount = form.cleaned_data['amount'],
                 date = date.today(),
-                card = card,
                 name = request.user.name,
                 surname = request.user.surname,
                 dniDonor = request.user.dni
             )
+
+            card.funds -= monto
+            card.save()
             return 'Se ha realizado la transferencia correctamente'
         return 'La tarjeta ingresada no posee fondos'
 
@@ -277,8 +279,9 @@ def make_transfer_donation(request):
 
             try:
                 card_number = form.cleaned_data['number']
+                monto = form.cleaned_data['amount']
                 card = Card.objects.filter(number= card_number, user = request.user).first()
-                message = has_founds(card, form)
+                message = has_founds(card, monto, form)
             except Exception as e:
                 message = 'La tarjeta no se encuentra registrada en el sistema'
 

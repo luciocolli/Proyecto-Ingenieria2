@@ -32,5 +32,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Card(models.Model):
     number = models.CharField(max_length= 18, unique= True)
-    user = models.ForeignKey(User, on_delete= models.DO_NOTHING, related_name='cards')
-    has_funds = models.BooleanField(default= True)
+    user = models.ForeignKey(User, on_delete= models.SET_NULL, related_name='cards', null= True)
+    funds = models.IntegerField(default= 10000)
