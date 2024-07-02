@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User, Card
 from landing.models import TransferDonation as transfer
-from landing.models import Publication, Calification, Intercambio
+from landing.models import Publication, Calification, Intercambio, Offer, Coment, CashDonation, ArticleDonation
 from django.db import IntegrityError
 from .forms import CreateNewUser, CreatelogIn, AddCard, TransferDonation #, EditProfileForm
 from django.contrib.auth import login, authenticate, logout

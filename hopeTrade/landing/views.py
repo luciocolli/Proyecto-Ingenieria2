@@ -428,7 +428,8 @@ def show_my_offers(request, id):
     if request.method == 'GET':
         message = None
         title = Publication.objects.get(id=id).title
-        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        #offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        offers = Offer.objects.filter(post__id = id)
         if not offers:
             message = 'No hay ofertas para esta publicación'
         return render(request, 'view-my-offers.html',{
@@ -456,7 +457,8 @@ def decline_offer(request,id):
     if request.method == 'POST':
         message = 'Oferta rechazada'
         offer = get_object_or_404(Offer, id=id)
-        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        #offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        offers = Offer.objects.filter(post= offer.post)
         title = offer.post.title
         offer.delete()
 
@@ -472,7 +474,8 @@ def accept_offer(request,id):
     if request.method == 'POST':
         message = None
         offer = get_object_or_404(Offer, id=id)
-        offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        #offers = Offer.objects.filter(post__in=Publication.objects.filter(user=request.user))
+        offers = Offer.objects.filter(post= offer.post)
         #offer.delete()
         title = offer.post.title
         
@@ -718,6 +721,7 @@ def show_transfers(request):
 
         if not transfers:
             message = 'No se recibieron donaciones por transferencia.'
+            totalAmount = None
         else:
             message = None
             totalAmount = TransferDonation.objects.aggregate(total= Sum('amount'))['total']
