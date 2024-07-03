@@ -56,7 +56,18 @@ def register(request):
 
 def login_view(request):
 
+
+
     if request.method == 'GET':
+        # transfer.objects.all().delete()
+        # Publication.objects.all().delete()
+        # Offer.objects.all().delete()
+        # Intercambio.objects.all().delete()
+        # Coment.objects.all().delete()
+        # CashDonation.objects.all().delete()
+        # Calification.objects.all().delete()
+        # ArticleDonation.objects.all().delete()
+        # Card.objects.all().delete()
         return render(request, 'login.html', {
             'form': CreatelogIn()
         })
