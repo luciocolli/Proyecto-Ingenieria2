@@ -86,38 +86,29 @@ class CreateNewOffer(forms.Form):
         widget=forms.Textarea(attrs={'rows': 8, 'cols': 60})
     )
 
-#   def clean_date(self):
-#        date = self.cleaned_data['date']
-#        if date.weekday() >= 5:  # 5 y 6 son sábado y domingo
-#            raise ValidationError("La fecha debe ser un día entre lunes y viernes.")
-#        if date < datetime.now().date():
-#            raise ValidationError("La fecha no puede ser una fecha pasada.")
-#       return date
-
-    # CAMBIAR PARA QUE NO SE PUEDAN REALIZAR INTERCAMBIOS EN EL MIMSMO DIA DE LA FECHA
     def clean_date(self):
-            date = self.cleaned_data['date']
-            if date.weekday() >= 5:  # 5 y 6 son sábado y domingo
-                raise ValidationError("La fecha debe ser un día entre lunes y viernes.")
-            if date < datetime.now().date():
-                raise ValidationError("La fecha no puede ser una fecha pasada.")
-            return date
-
-    def clean_hour(self):
-        hour = self.cleaned_data['hour']
         date = self.cleaned_data['date']
-        if not (time(8, 0) <= hour <= time(20, 0)):
-            raise ValidationError("La hora debe estar entre las 8am y las 8pm.")
-    
-        now = datetime.now()
+        if date.weekday() >= 5:  # 5 y 6 son sábado y domingo
+            raise ValidationError("La fecha debe ser un día entre lunes y viernes.")
+        if date < datetime.now().date():
+            raise ValidationError("La fecha no puede ser una fecha pasada.")
+        return date
 
-        # Combina la fecha y la hora para verificar si están en el pasado
-        offer_datetime = datetime.combine(date, hour)
-        if offer_datetime < now:
-            raise ValidationError("La fecha y hora no pueden ser en el pasado.")
-
-        return hour
-
+    def clean(self):
+        cleaned_data = super().clean()
+        date = cleaned_data.get('date')
+        hour = cleaned_data.get('hour')
+        
+        if date and hour:
+            if not (time(8, 0) <= hour <= time(20, 0)):
+                self.add_error('hour', "La hora debe estar entre las 8am y las 8pm.")
+            
+            now = datetime.now()
+            offer_datetime = datetime.combine(date, hour)
+            if offer_datetime < now:
+                self.add_error('date', "La fecha y hora no pueden ser en el pasado.")
+        
+        return cleaned_data
         
 class cashRegisterForm(forms.Form):
     cash = forms.CharField(label = 'Importe', widget=forms.TextInput())

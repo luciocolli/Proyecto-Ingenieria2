@@ -51,7 +51,7 @@ def createPublication(request):
 
             new_title = request.POST['title']
             post_owner = request.user
-            exists_title = Publication.objects.filter(user= post_owner, title= new_title).exists()
+            exists_title = Publication.objects.filter(user= post_owner, title= new_title, isHide=False).exists()
             cleaned_date = form.cleaned_data['date'] # The date is cleaned in case it's empty
             # This conditional checks if the user that is creating the post already has one with the same title
             if exists_title:
@@ -603,7 +603,17 @@ def confirm_intercambio(request, id):
         back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{id}')
         back.enviarMail(user2.mail, 'Calificar Intercambio', f'Hola {user2.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Califica aqui: {url}/{id}')
 
-        return render(request, 'show-intercambios-dia.html')
+        today = datetime.now().date()
+        intercambios = Intercambio.objects.filter(isDone = False, isHide = False, date = today) # chequear
+        if not intercambios :
+            message = 'No hay intercambios pendientes en el dia de la fecha.'
+        else:
+            message = None
+
+        return render(request, 'show-intercambios-dia.html',{
+            'intercambios':intercambios,
+            'msg':message
+        })
        # back.enviarMail(user1.mail, 'Calificar Intercambio', f'Hola {user1.name}, nos gustaría que nos dejes tu reseña con una calificación sobre el intercambio. Por favor, califica tu experiencia aquí: <a href="URL_DE_TU_SITIO_PARA_CALIFICAR">Calificar Intercambio</a>')
        # back.enviarMail(user1.mail,'Calificar Intercambio', f'Hola {user1.name} nos gustaria que nos dejes tu reseña con una calificacion sobre el intercambio. Entra aqui: <a href="URL_DE_TU_SITIO_PARA_CALIFICAR">Calificar Intercambio</a> ')
        # back.enviarMail(user2.mail,'Calificar Intercambio', f'Hola {user2.name} nos gustaria que nos dejes tu reseña con una calificacion sobre el intercambio ')
@@ -632,11 +642,22 @@ def form_decline_intercambio(request, id):
             intercambio.post.isHide = False
             intercambio.isHide = True
             intercambio.save()
+            intercambio.post.save()
             
-    return render(request, 'show-intercambios-dia.html')
+        today = datetime.now().date()
+        intercambios = Intercambio.objects.filter(isDone = False, isHide = False, date = today) # chequear
+        if not intercambios :
+            message = 'No hay intercambios pendientes en el dia de la fecha.'
+        else:
+            message = None
+
+        return render(request, 'show-intercambios-dia.html',{
+            'intercambios':intercambios,
+            'msg':message
+        })
 
 
-
+#Este se usa?
 def decline_intercambio(request, id):
     if request.method == 'POST':
         intercambio = get_object_or_404(Intercambio, id= id)
