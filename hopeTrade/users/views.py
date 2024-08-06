@@ -9,7 +9,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from datetime import datetime
 from datetime import date
-from django.contrib.auth.decorators import login_required, admin_required
+from django.contrib.auth.decorators import login_required
 from . import backend as back
 from django.db.models import Avg, Q
 # Create your views here.
